@@ -1,11 +1,7 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
+  command = ""
+  publish = "."
 
-# NOTE: Base directory must be set in Netlify UI:
-# - If package.json is at root (/package.json) → Base directory = (empty/root)
-# - If package.json is in src/ (src/package.json) → Base directory = "src"
-# 
-# Current assumption: package.json at root (standard for React Native)
-# If package.json is actually in src/, set Base directory to "src" in:
-# Netlify → Site settings → Build & deploy → Build settings
+# Environment variables required in Netlify UI:
+# STRIPE_SECRET_KEY - Stripe secret key (sk_live_... or sk_test_...)
+# STRIPE_LIVE_MODE - Set to "true" for production, "false" for test mode
