@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# NOTE: Base directory must be set in Netlify UI:
+# - If package.json is at root (/package.json) → Base directory = (empty/root)
+# - If package.json is in src/ (src/package.json) → Base directory = "src"
+# 
+# Current assumption: package.json at root (standard for React Native)
+# If package.json is actually in src/, set Base directory to "src" in:
+# Netlify → Site settings → Build & deploy → Build settings
