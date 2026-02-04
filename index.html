@@ -3,473 +3,394 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0d0d0d">
-  <meta name="description" content="Beginner boxing training. Audio-guided. No gym required.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Beginner boxing. Audio-guided. No gym.">
   <title>Sofa2Slugger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    /* ==========================================================================
-       DESIGN SYSTEM
-       ========================================================================== */
     :root {
-      --bg-core: #0d0d0d;
-      --bg-surface: #161615;
-      --bg-elevated: #1c1c1b;
+      --bg-base: #0a0a0a;
+      --bg-surface: #111111;
+      --bg-elevated: #181818;
+      --bg-hover: #1f1f1f;
 
-      --text-primary: rgba(255, 255, 255, 0.92);
-      --text-secondary: rgba(255, 255, 255, 0.6);
-      --text-tertiary: rgba(255, 255, 255, 0.4);
-      --text-muted: rgba(255, 255, 255, 0.2);
+      --text-primary: rgba(255, 255, 255, 0.95);
+      --text-secondary: rgba(255, 255, 255, 0.55);
+      --text-tertiary: rgba(255, 255, 255, 0.35);
+      --text-muted: rgba(255, 255, 255, 0.15);
 
-      --accent-red: #9e2a2b;
-      --accent-green: #2a9e4a;
+      --accent: #c23a3a;
+      --accent-subtle: rgba(194, 58, 58, 0.15);
+      --success: #3a8c5a;
 
-      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font: 'Inter', -apple-system, system-ui, sans-serif;
+      --mono: ui-monospace, 'SF Mono', monospace;
 
-      --space-xs: 4px;
-      --space-sm: 8px;
+      --space-2xs: 4px;
+      --space-xs: 8px;
+      --space-sm: 12px;
       --space-md: 16px;
       --space-lg: 24px;
-      --space-xl: 40px;
-      --space-2xl: 64px;
-      --space-3xl: 96px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 72px;
 
       --radius-sm: 4px;
       --radius-md: 8px;
-      --radius-lg: 16px;
-
-      --transition-fast: 0.15s ease;
-      --transition-medium: 0.3s ease;
+      --radius-lg: 12px;
     }
 
-    /* ==========================================================================
-       RESET & BASE
-       ========================================================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: var(--font-stack);
-      background: var(--bg-core);
+      font-family: var(--font);
+      background: var(--bg-base);
       color: var(--text-primary);
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; cursor: pointer; }
-    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-    /* ==========================================================================
-       SPLASH SCREEN
-       ========================================================================== */
+    /* ══════════════════════════════════════════════════════════════════════════
+       SPLASH
+       ══════════════════════════════════════════════════════════════════════════ */
     .splash {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: var(--bg-core);
+      background: var(--bg-base);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      opacity: 1;
+      transition: opacity 0.4s ease;
     }
 
-    .splash.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+    .splash.hidden { opacity: 0; pointer-events: none; }
 
     .splash-brand {
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(2.5rem, 10vw, 4rem);
       font-weight: 300;
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-sm);
+      letter-spacing: -0.04em;
     }
 
-    .splash-brand .accent { color: var(--accent-red); }
+    .splash-brand .a { color: var(--accent); }
 
-    .splash-tagline {
+    .splash-sub {
       color: var(--text-tertiary);
-      font-size: 1rem;
-      font-weight: 300;
-      margin-bottom: var(--space-3xl);
+      font-size: 0.9rem;
+      margin-top: var(--space-xs);
     }
 
-    .splash-cta {
-      position: absolute;
-      bottom: var(--space-xl);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.6; }
-    }
-
-    /* ==========================================================================
-       APP CONTAINER & VIEWS
-       ========================================================================== */
+    /* ══════════════════════════════════════════════════════════════════════════
+       LAYOUT
+       ══════════════════════════════════════════════════════════════════════════ */
     .app {
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding-bottom: 80px;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-md);
+      padding-bottom: 100px;
     }
 
-    .view {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .view.active { display: block; }
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.25s ease; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ==========================================================================
-       PROGRAMME VIEW - HERO
-       ========================================================================== */
-    .hero {
-      padding: var(--space-3xl) var(--space-lg) var(--space-xl);
+    /* ══════════════════════════════════════════════════════════════════════════
+       PROGRAMME VIEW
+       ══════════════════════════════════════════════════════════════════════════ */
+    .programme-header {
       text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
+      margin-bottom: var(--space-2xl);
     }
 
-    .hero-brand {
-      font-size: 1.5rem;
+    .programme-brand {
+      font-size: 1.35rem;
       font-weight: 300;
       letter-spacing: -0.02em;
-      margin-bottom: var(--space-xs);
     }
 
-    .hero-brand .accent { color: var(--accent-red); }
+    .programme-brand .a { color: var(--accent); }
 
-    .hero-tagline {
+    .programme-tagline {
       color: var(--text-secondary);
-      font-size: 0.95rem;
-      margin-bottom: var(--space-xl);
+      font-size: 0.85rem;
+      margin-top: var(--space-2xs);
     }
 
-    .hero-intro {
-      background: var(--bg-surface);
-      border-radius: var(--radius-md);
-      padding: var(--space-lg);
-      margin-bottom: var(--space-xl);
-      text-align: left;
-    }
-
-    .hero-intro p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      line-height: 1.7;
-    }
-
-    .hero-intro p + p {
-      margin-top: var(--space-md);
-    }
-
-    .hero-cta {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-md);
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    /* ==========================================================================
-       BUTTONS
-       ========================================================================== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--space-md) var(--space-lg);
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: var(--transition-fast);
+    .programme-cta {
+      margin-top: var(--space-lg);
     }
 
     .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-lg);
       background: var(--text-primary);
-      color: var(--bg-core);
+      color: var(--bg-base);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: opacity 0.15s;
     }
 
     .btn-primary:hover { opacity: 0.9; }
     .btn-primary:active { transform: scale(0.98); }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--text-muted);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--text-tertiary);
-      color: var(--text-primary);
-    }
-
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    /* ==========================================================================
-       PROGRESS SUMMARY
-       ========================================================================== */
-    .progress-summary {
-      max-width: 600px;
-      margin: 0 auto var(--space-xl);
-      padding: 0 var(--space-lg);
-    }
-
-    .progress-bar-container {
+    /* Progress indicator (inline, subtle) */
+    .programme-progress {
       display: flex;
       align-items: center;
-      gap: var(--space-md);
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
     }
 
-    .progress-bar {
-      flex: 1;
-      height: 4px;
+    .progress-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
       background: var(--bg-elevated);
-      border-radius: 2px;
+    }
+
+    .progress-dot.complete { background: var(--text-tertiary); }
+    .progress-dot.current { background: var(--text-primary); }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       PHASES (Session Groups)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .phases {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .phase {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
       overflow: hidden;
     }
 
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--text-secondary);
-      transition: width 0.5s ease;
-    }
-
-    .progress-label {
-      font-size: 0.75rem;
-      color: var(--text-tertiary);
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ==========================================================================
-       SESSION LIST
-       ========================================================================== */
-    .sessions-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0 var(--space-lg);
-    }
-
-    .sessions-header {
+    .phase-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: var(--space-md);
-      padding: 0 var(--space-xs);
+      padding: var(--space-md) var(--space-lg);
+      cursor: pointer;
+      transition: background 0.15s;
     }
 
-    .sessions-title {
-      font-size: 0.75rem;
+    .phase-header:hover { background: var(--bg-elevated); }
+
+    .phase-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .phase-label {
+      font-size: 0.65rem;
       color: var(--text-tertiary);
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
 
-    .sessions-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      background: var(--bg-elevated);
-      border-radius: var(--radius-md);
-      overflow: hidden;
+    .phase-title {
+      font-size: 0.95rem;
+      font-weight: 400;
     }
 
-    /* ==========================================================================
-       SESSION CARD
-       ========================================================================== */
-    .session-card {
+    .phase-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .phase-count {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+    }
+
+    .phase-pips {
+      display: flex;
+      gap: 3px;
+    }
+
+    .phase-pip {
+      width: 4px;
+      height: 12px;
+      background: var(--bg-hover);
+      border-radius: 1px;
+    }
+
+    .phase-pip.complete { background: var(--text-tertiary); }
+
+    .phase-chevron {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      transition: transform 0.2s;
+    }
+
+    .phase.expanded .phase-chevron { transform: rotate(180deg); }
+
+    .phase-sessions {
+      display: none;
+      border-top: 1px solid var(--bg-elevated);
+    }
+
+    .phase.expanded .phase-sessions { display: block; }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SESSION CARDS
+       ══════════════════════════════════════════════════════════════════════════ */
+    .session {
       display: flex;
       align-items: center;
       gap: var(--space-md);
       padding: var(--space-md) var(--space-lg);
       background: var(--bg-surface);
-      transition: var(--transition-fast);
+      border-top: 1px solid var(--bg-elevated);
+      cursor: pointer;
+      transition: background 0.15s;
     }
 
-    .session-card:hover:not(.locked) {
-      background: var(--bg-elevated);
-    }
+    .session:first-child { border-top: none; }
+    .session:hover:not(.locked) { background: var(--bg-hover); }
 
-    .session-card.locked {
-      opacity: 0.5;
-    }
+    .session.locked { opacity: 0.4; cursor: default; }
+    .session.current { background: var(--bg-elevated); }
 
-    .session-card.completed {
-      opacity: 0.7;
-    }
-
-    .session-card.current {
-      background: var(--bg-elevated);
-      border-left: 2px solid var(--text-secondary);
-    }
-
-    .session-number {
-      font-family: 'Georgia', serif;
-      font-size: 1.25rem;
+    .session-num {
+      font-family: var(--mono);
+      font-size: 0.8rem;
       color: var(--text-tertiary);
-      width: 32px;
-      text-align: center;
+      width: 24px;
     }
 
-    .session-info {
-      flex: 1;
-      min-width: 0;
-    }
+    .session-content { flex: 1; min-width: 0; }
 
     .session-name {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-primary);
-      margin-bottom: 2px;
     }
 
-    .session-meta {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
+    .session-focus {
       font-size: 0.75rem;
       color: var(--text-tertiary);
+      margin-top: 1px;
     }
 
     .session-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 6px;
-      border-radius: 2px;
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 2px;
     }
 
     .status-free {
-      background: rgba(255,255,255,0.1);
-      color: var(--text-primary);
+      background: var(--accent-subtle);
+      color: var(--accent);
+    }
+
+    .status-done {
+      color: var(--success);
     }
 
     .status-locked {
-      border: 1px solid var(--text-muted);
-      color: var(--text-tertiary);
+      color: var(--text-muted);
     }
 
-    .status-completed {
-      color: var(--accent-green);
-    }
-
-    .session-action {
-      padding: var(--space-sm) var(--space-md);
-      background: transparent;
-      border: 1px solid var(--text-muted);
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      font-size: 0.75rem;
-      opacity: 0;
-      transform: translateX(8px);
-      transition: var(--transition-fast);
-    }
-
-    .session-card:hover .session-action:not(:disabled) {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .session-card.locked .session-action {
-      display: none;
-    }
-
-    .session-lock-icon {
-      font-size: 1rem;
-      opacity: 0.5;
-    }
-
-    /* ==========================================================================
-       PURCHASE SECTION
-       ========================================================================== */
-    .purchase-section {
-      max-width: 600px;
-      margin: var(--space-xl) auto;
-      padding: var(--space-xl) var(--space-lg);
+    /* ══════════════════════════════════════════════════════════════════════════
+       UNLOCK PROMPT (Subtle, contextual)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .unlock-prompt {
+      margin-top: var(--space-xl);
+      padding: var(--space-lg);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--bg-elevated);
       text-align: center;
     }
 
-    .purchase-card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-md);
-      padding: var(--space-xl);
-      border: 1px solid var(--text-muted);
-    }
+    .unlock-prompt.hidden { display: none; }
 
-    .purchase-heading {
-      font-size: 1.1rem;
-      font-weight: 400;
-      margin-bottom: var(--space-sm);
-    }
-
-    .purchase-desc {
+    .unlock-text {
       color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: var(--space-lg);
+      font-size: 0.85rem;
+      margin-bottom: var(--space-md);
     }
 
-    .purchase-price {
-      font-size: 1.5rem;
-      font-weight: 300;
-      margin-bottom: var(--space-lg);
+    .unlock-price {
+      font-size: 1.1rem;
+      margin-bottom: var(--space-md);
     }
 
-    .purchase-price small {
-      font-size: 0.8rem;
+    .unlock-price small {
+      font-size: 0.75rem;
       color: var(--text-tertiary);
     }
 
-    /* ==========================================================================
-       BOTTOM NAVIGATION
-       ========================================================================== */
+    .btn-unlock {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .btn-unlock:hover {
+      background: var(--bg-hover);
+      border-color: var(--text-tertiary);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       BOTTOM NAV
+       ══════════════════════════════════════════════════════════════════════════ */
     .nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--bg-core);
-      border-top: 1px solid var(--text-muted);
-      padding: var(--space-sm) var(--space-lg);
-      padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+      background: var(--bg-base);
+      border-top: 1px solid var(--bg-elevated);
+      padding: var(--space-xs) var(--space-md);
+      padding-bottom: max(var(--space-xs), env(safe-area-inset-bottom));
       z-index: 100;
     }
 
-    .nav-list {
+    .nav-inner {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+      gap: var(--space-xl);
       max-width: 400px;
       margin: 0 auto;
     }
@@ -479,225 +400,125 @@
       flex-direction: column;
       align-items: center;
       gap: 2px;
-      padding: var(--space-sm);
-      color: var(--text-tertiary);
-      font-size: 0.65rem;
+      padding: var(--space-xs) var(--space-sm);
+      color: var(--text-muted);
+      font-size: 0.6rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: var(--transition-fast);
+      letter-spacing: 0.08em;
+      transition: color 0.15s;
     }
 
-    .nav-item:hover { color: var(--text-secondary); }
+    .nav-item:hover { color: var(--text-tertiary); }
     .nav-item.active { color: var(--text-primary); }
 
     .nav-icon {
-      font-size: 1.25rem;
-      margin-bottom: 2px;
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
     }
 
-    /* ==========================================================================
-       SUB-PAGE LAYOUT
-       ========================================================================== */
-    .page {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: var(--space-lg);
-      padding-bottom: var(--space-3xl);
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECONDARY PAGES
+       ══════════════════════════════════════════════════════════════════════════ */
+    .page-header {
+      margin-bottom: var(--space-2xl);
     }
 
     .page-back {
       display: inline-flex;
       align-items: center;
-      gap: var(--space-sm);
+      gap: var(--space-xs);
       color: var(--text-tertiary);
-      font-size: 0.85rem;
-      margin-bottom: var(--space-xl);
-      transition: var(--transition-fast);
+      font-size: 0.8rem;
+      margin-bottom: var(--space-lg);
+      transition: color 0.15s;
     }
 
     .page-back:hover { color: var(--text-secondary); }
 
     .page-title {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 300;
-      margin-bottom: var(--space-xs);
+      letter-spacing: -0.02em;
     }
 
     .page-subtitle {
       color: var(--text-tertiary);
-      font-size: 0.9rem;
-      margin-bottom: var(--space-2xl);
+      font-size: 0.85rem;
+      margin-top: var(--space-2xs);
     }
 
-    /* ==========================================================================
-       FIGHT IQ PAGE
-       ========================================================================== */
-    .glossary {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3xl);
-    }
+    /* Fight IQ */
+    .glossary { display: flex; flex-direction: column; gap: var(--space-2xl); }
 
-    .term-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xl);
-    }
+    .term-group { display: flex; flex-direction: column; gap: var(--space-lg); }
 
     .term-category {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.12em;
       color: var(--text-tertiary);
-      padding-bottom: var(--space-sm);
-      border-bottom: 1px solid var(--text-muted);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--bg-elevated);
     }
 
-    .term-card {
+    .term {
       padding-left: var(--space-md);
-      border-left: 2px solid var(--text-muted);
+      border-left: 2px solid var(--bg-elevated);
     }
 
     .term-name {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
-      margin-bottom: var(--space-md);
-    }
-
-    .term-section {
-      display: grid;
-      grid-template-columns: 48px 1fr;
-      gap: var(--space-sm);
       margin-bottom: var(--space-sm);
     }
 
+    .term-def {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+      font-size: 0.85rem;
+    }
+
     .term-label {
-      font-size: 0.7rem;
+      flex-shrink: 0;
+      width: 40px;
       color: var(--text-tertiary);
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      text-align: right;
-      padding-top: 3px;
+      padding-top: 2px;
     }
 
     .term-text {
-      font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.6;
     }
 
-    /* ==========================================================================
-       PROGRESS PAGE (TALE OF THE TAPE)
-       ========================================================================== */
-    .tape-level {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: var(--space-md) 0;
-      margin-bottom: var(--space-xl);
-      border-bottom: 1px solid var(--text-muted);
-    }
-
-    .level-name {
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-
-    .level-count {
-      font-family: monospace;
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
-    }
-
-    .tape-phases {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2xl);
-    }
-
-    .phase {
-      opacity: 0.4;
-      transition: var(--transition-medium);
-    }
-
-    .phase.active { opacity: 1; }
-    .phase.done { opacity: 0.6; }
-
-    .phase-header {
-      margin-bottom: var(--space-md);
-    }
-
-    .phase-category {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--text-tertiary);
-      margin-bottom: var(--space-xs);
-    }
-
-    .phase-name {
-      font-size: 1.1rem;
-      font-weight: 400;
-      margin-bottom: 2px;
-    }
-
-    .phase-range {
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: var(--text-tertiary);
-    }
-
-    .phase-desc {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-md);
-    }
-
-    .phase-pips {
-      display: flex;
-      gap: 4px;
-    }
-
-    .pip {
-      width: 3px;
-      height: 8px;
-      background: var(--text-muted);
-      transition: var(--transition-fast);
-    }
-
-    .pip.complete {
-      background: var(--text-secondary);
-    }
-
-    /* ==========================================================================
-       CORNER PAGE
-       ========================================================================== */
-    .corner-section {
-      margin-bottom: var(--space-2xl);
-    }
+    /* Corner */
+    .corner-section { margin-bottom: var(--space-2xl); }
 
     .corner-section h2 {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
-      margin-bottom: var(--space-md);
+      margin-bottom: var(--space-sm);
     }
 
     .corner-section p {
       font-size: 0.85rem;
       color: var(--text-secondary);
       line-height: 1.7;
-      margin-bottom: var(--space-sm);
+      margin-bottom: var(--space-xs);
     }
 
-    .qa-item {
-      margin-bottom: var(--space-lg);
-    }
+    .qa { margin-bottom: var(--space-md); }
 
     .qa-q {
       font-size: 0.85rem;
       font-weight: 500;
-      margin-bottom: var(--space-xs);
+      margin-bottom: 2px;
     }
 
     .qa-a {
@@ -706,86 +527,76 @@
       line-height: 1.6;
     }
 
-    .support-email {
-      color: var(--accent-green);
-    }
+    .link-email { color: var(--success); }
 
-    .reset-btn {
-      background: rgba(158, 42, 43, 0.1);
-      color: var(--accent-red);
-      border: 1px solid rgba(158, 42, 43, 0.3);
-      padding: var(--space-sm) var(--space-md);
+    .btn-reset {
+      padding: var(--space-xs) var(--space-md);
+      background: var(--accent-subtle);
+      color: var(--accent);
+      font-size: 0.8rem;
       border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      margin-top: var(--space-sm);
+      margin-top: var(--space-xs);
+      transition: background 0.15s;
     }
 
-    .reset-btn:hover {
-      background: rgba(158, 42, 43, 0.2);
-    }
+    .btn-reset:hover { background: rgba(194, 58, 58, 0.25); }
 
-    /* ==========================================================================
-       AUDIO PLAYER OVERLAY
-       ========================================================================== */
+    /* ══════════════════════════════════════════════════════════════════════════
+       PLAYER MODAL
+       ══════════════════════════════════════════════════════════════════════════ */
     .player-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.85);
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: var(--transition-medium);
+      transition: opacity 0.2s, visibility 0.2s;
     }
 
-    .player-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
+    .player-overlay.active { opacity: 1; visibility: visible; }
 
     .player {
       background: var(--bg-surface);
       border-radius: var(--radius-lg);
-      padding: var(--space-xl);
-      max-width: 360px;
+      padding: var(--space-2xl) var(--space-xl);
       width: 90%;
+      max-width: 340px;
       text-align: center;
-      transform: translateY(20px);
-      transition: var(--transition-medium);
+      transform: scale(0.95);
+      transition: transform 0.2s;
     }
 
-    .player-overlay.active .player {
-      transform: translateY(0);
-    }
+    .player-overlay.active .player { transform: scale(1); }
 
-    .player-session {
-      font-size: 0.7rem;
+    .player-label {
+      font-size: 0.65rem;
       color: var(--text-tertiary);
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      margin-bottom: var(--space-xs);
     }
 
-    .player-number {
-      font-family: 'Georgia', serif;
-      font-size: 3rem;
-      color: var(--text-primary);
-      margin-bottom: var(--space-sm);
+    .player-num {
+      font-family: Georgia, serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      margin: var(--space-xs) 0;
     }
 
     .player-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text-secondary);
       margin-bottom: var(--space-xl);
     }
 
-    .player-phase {
-      font-size: 0.85rem;
+    .player-status {
+      font-size: 0.8rem;
       color: var(--text-tertiary);
       margin-bottom: var(--space-lg);
-      min-height: 24px;
+      min-height: 20px;
     }
 
     .player-controls {
@@ -795,20 +606,19 @@
     }
 
     .player-btn {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      transition: var(--transition-fast);
+      font-size: 1.25rem;
+      transition: all 0.15s;
     }
 
     .player-btn-main {
       background: var(--text-primary);
-      color: var(--bg-core);
+      color: var(--bg-base);
     }
 
     .player-btn-main:hover { opacity: 0.9; }
@@ -818,349 +628,152 @@
       color: var(--text-secondary);
     }
 
-    .player-btn-stop:hover {
-      background: var(--accent-red);
-      color: white;
-    }
+    .player-btn-stop:hover { background: var(--accent); color: white; }
 
     .player-close {
       position: absolute;
       top: var(--space-md);
       right: var(--space-md);
-      background: none;
-      border: none;
-      color: var(--text-tertiary);
+      color: var(--text-muted);
       font-size: 1.5rem;
-      padding: var(--space-sm);
+      padding: var(--space-xs);
     }
 
-    .player-close:hover { color: var(--text-primary); }
+    .player-close:hover { color: var(--text-tertiary); }
 
-    /* ==========================================================================
-       LOADING STATE
-       ========================================================================== */
-    .loading {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid var(--text-muted);
-      border-top-color: var(--text-primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ==========================================================================
+    /* ══════════════════════════════════════════════════════════════════════════
        RESPONSIVE
-       ========================================================================== */
+       ══════════════════════════════════════════════════════════════════════════ */
     @media (max-width: 480px) {
-      .hero { padding: var(--space-2xl) var(--space-md) var(--space-xl); }
-      .sessions-container { padding: 0 var(--space-md); }
-      .session-card { padding: var(--space-md); }
-      .session-action { opacity: 1; transform: none; }
-      .term-section { grid-template-columns: 1fr; }
-      .term-label { text-align: left; margin-bottom: var(--space-xs); }
+      .app { padding: var(--space-lg) var(--space-sm); }
+      .phase-header { padding: var(--space-sm) var(--space-md); }
+      .session { padding: var(--space-sm) var(--space-md); }
+      .term-def { flex-direction: column; gap: 2px; }
+      .term-label { width: auto; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ========== SPLASH SCREEN ========== -->
+  <!-- SPLASH -->
   <div class="splash" id="splash">
-    <h1 class="splash-brand">SOFA<span class="accent">2</span>SLUGGER</h1>
-    <p class="splash-tagline">Boxing for the rest of us.</p>
-    <span class="splash-cta">Tap to begin</span>
+    <h1 class="splash-brand">SOFA<span class="a">2</span>SLUGGER</h1>
+    <p class="splash-sub">Beginner boxing. Audio-guided. No gym.</p>
   </div>
 
-  <!-- ========== MAIN APP ========== -->
+  <!-- APP -->
   <div class="app">
 
     <!-- PROGRAMME VIEW -->
     <div class="view active" id="view-programme">
-      <header class="hero">
-        <h1 class="hero-brand">Sofa<span class="accent">2</span>Slugger</h1>
-        <p class="hero-tagline">Beginner boxing. Audio-guided. No gym.</p>
-
-        <div class="hero-intro">
-          <p>10 structured audio sessions that teach you real boxing fundamentals. No screens to watch, no scores to chase. Just press play, listen, and move.</p>
-          <p>Session 1 is free. When you're ready, unlock the full programme for one simple payment.</p>
+      <header class="programme-header">
+        <h1 class="programme-brand">Sofa<span class="a">2</span>Slugger</h1>
+        <p class="programme-tagline">10 sessions. Real boxing fundamentals. Just listen and move.</p>
+        <div class="programme-cta">
+          <button class="btn-primary" id="cta-main">Begin Session 1</button>
         </div>
-
-        <div class="hero-cta">
-          <button class="btn btn-primary" id="cta-main">Begin Session 1</button>
-          <button class="btn btn-secondary" id="cta-purchase" style="display:none;">Unlock Sessions 2-10</button>
+        <div class="programme-progress" id="programme-progress" style="display:none;">
+          <div class="progress-dots" id="progress-dots"></div>
         </div>
       </header>
 
-      <div class="progress-summary" id="progress-summary" style="display:none;">
-        <div class="progress-bar-container">
-          <div class="progress-bar">
-            <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
-          </div>
-          <span class="progress-label" id="progress-label">0/10</span>
-        </div>
-      </div>
+      <div class="phases" id="phases"></div>
 
-      <div class="sessions-container">
-        <div class="sessions-header">
-          <span class="sessions-title">Training Sessions</span>
-        </div>
-        <div class="sessions-list" id="sessions-list"></div>
-      </div>
-
-      <div class="purchase-section" id="purchase-section">
-        <div class="purchase-card">
-          <h2 class="purchase-heading">Unlock the Full Programme</h2>
-          <p class="purchase-desc">Sessions 2-10 build momentum, confidence, and rhythm. One payment, lifetime access.</p>
-          <p class="purchase-price">£9.99 <small>one-time</small></p>
-          <button class="btn btn-primary" id="btn-purchase">Unlock Now</button>
-        </div>
+      <div class="unlock-prompt hidden" id="unlock-prompt">
+        <p class="unlock-text">Sessions 2–10 unlock with a single payment.</p>
+        <p class="unlock-price">£9.99 <small>one-time</small></p>
+        <button class="btn-unlock" id="btn-unlock">Unlock Full Programme</button>
       </div>
     </div>
 
     <!-- FIGHT IQ VIEW -->
     <div class="view" id="view-fightiq">
-      <div class="page">
-        <a href="#" class="page-back" data-view="programme">← Back</a>
+      <header class="page-header">
+        <a href="#" class="page-back" data-view="programme">← Programme</a>
         <h1 class="page-title">Fight IQ</h1>
         <p class="page-subtitle">The language of boxing</p>
+      </header>
 
-        <div class="glossary">
-          <!-- Offensive Tools -->
-          <div class="term-group">
-            <div class="term-category">Offensive Tools</div>
+      <div class="glossary">
+        <div class="term-group">
+          <div class="term-category">Offensive Tools</div>
 
-            <div class="term-card">
-              <h3 class="term-name">Jab</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">A quick, straight punch thrown with your lead hand. The first punch you learn and the last one you master.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">The jab sets everything up. It measures distance, disrupts rhythm, and creates openings for power shots.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Think of flicking a wet towel. The power comes from the snap, not the wind-up. Extend fast, retract faster.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Cross</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">A straight power punch with your rear hand, rotating hips and shoulders through the target.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">This is your hammer. While the jab probes, the cross punishes. The punch that ends exchanges.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Imagine pushing a heavy door with your whole body. Back foot pivots, hip turns, shoulder follows. Power from the ground up.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Hook</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">A curved punch in a horizontal arc, targeting the side of head or body.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Hooks attack angles straight punches cannot reach. They come from the blind spot.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Imagine slamming a door shut with your whole body behind it. Your arm stays bent, elbow locked at 90 degrees. The power comes from your hips snapping round.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Uppercut</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">A vertical punch driven upward, targeting chin or body at close range.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">When the straight line is blocked, you go under. Exploits the gap between elbows.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Drop hand, bend knees, drive up. Legs do the work. Standing up fast with fist in the way.</p>
-              </div>
-            </div>
+          <div class="term">
+            <h3 class="term-name">Jab</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">A quick, straight punch with your lead hand. The first punch you learn and the last one you master.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Sets everything up. Measures distance, disrupts rhythm, creates openings.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Flick a wet towel. Power comes from the snap. Extend fast, retract faster.</p></div>
           </div>
 
-          <!-- Defensive Structure -->
-          <div class="term-group">
-            <div class="term-category">Defensive Structure</div>
-
-            <div class="term-card">
-              <h3 class="term-name">Stance</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">Your foundational position. Feet placement, weight distribution, where hands live.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Everything starts here. Weak stance means weak punches and easy knockdowns.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Feet shoulder-width, staggered. Knees soft. Like standing on a surfboard - stable but ready.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Guard</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">Defensive hand position protecting head and body when not throwing.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Offence gets glory but defence keeps you fighting. Your guard is your seatbelt.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Hands by cheekbones, elbows tucked. Chin down, eyes up. Like holding phones to your ears.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Slip</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">Head movement off centre line, letting punches pass by instead of through.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Blocking absorbs damage. Slipping avoids it and sets up your counter.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Bend at waist, not knees. Two inches is a mile. Small movements, eyes on target.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Roll</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">Bend and rotate to let hooks pass over your head or shoulder.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Hooks come from the side. Rolling takes you under and back up ready to fire.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Duck under a clothesline while walking forward. A U-shape, not straight down-and-up.</p>
-              </div>
-            </div>
+          <div class="term">
+            <h3 class="term-name">Cross</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">A straight power punch with your rear hand, rotating hips and shoulders through.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Your hammer. The jab probes, the cross punishes.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Push a heavy door with your whole body. Back foot pivots, hip turns, shoulder follows.</p></div>
           </div>
 
-          <!-- Ring Generalship -->
-          <div class="term-group">
-            <div class="term-category">Ring Generalship</div>
+          <div class="term">
+            <h3 class="term-name">Hook</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">A curved punch in a horizontal arc, targeting the side of head or body.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Attacks angles straight punches can't reach. Comes from the blind spot.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Slam a door shut. Arm bent at 90°, power from hips snapping round.</p></div>
+          </div>
 
-            <div class="term-card">
-              <h3 class="term-name">Footwork</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">How you move. Stepping, pivoting, cutting angles while staying balanced.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Feet set up everything. Good footwork puts you in range to land, out of range to get hit.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Push, do not step. Never cross feet. Think sliding on ice - smooth, balanced, controlled.</p>
-              </div>
-            </div>
-
-            <div class="term-card">
-              <h3 class="term-name">Range</h3>
-              <div class="term-section">
-                <span class="term-label">What</span>
-                <p class="term-text">Distance between you and target. Long, mid, and close range have different tools.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">Why</span>
-                <p class="term-text">Punches only work at specific distances. Knowing range means knowing which weapon to use.</p>
-              </div>
-              <div class="term-section">
-                <span class="term-label">How</span>
-                <p class="term-text">Jab is your measuring stick. Fully extended is long range. Bent arm is closer.</p>
-              </div>
-            </div>
+          <div class="term">
+            <h3 class="term-name">Uppercut</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">A vertical punch driven upward, targeting chin or body at close range.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">When the straight line is blocked, you go under.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Drop hand, bend knees, drive up. Standing up fast with fist in the way.</p></div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- PROGRESS VIEW -->
-    <div class="view" id="view-progress">
-      <div class="page">
-        <a href="#" class="page-back" data-view="programme">← Back</a>
-        <h1 class="page-title">Tale of the Tape</h1>
-        <p class="page-subtitle">Your journey through the programme</p>
+        <div class="term-group">
+          <div class="term-category">Defensive Structure</div>
 
-        <div class="tape-level" id="tape-level">
-          <span class="level-name" id="level-name">Not Started</span>
-          <span class="level-count" id="level-count">0 of 10</span>
+          <div class="term">
+            <h3 class="term-name">Stance</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">Your foundational position. Feet placement, weight distribution, hand position.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Everything starts here. Weak stance means weak punches.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Feet shoulder-width, staggered. Knees soft. Like standing on a surfboard.</p></div>
+          </div>
+
+          <div class="term">
+            <h3 class="term-name">Guard</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">Defensive hand position protecting head and body when not throwing.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Defence keeps you fighting. Your guard is your seatbelt.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Hands by cheekbones, elbows tucked. Chin down, eyes up.</p></div>
+          </div>
+
+          <div class="term">
+            <h3 class="term-name">Slip</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">Head movement off centre line, letting punches pass by.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Blocking absorbs damage. Slipping avoids it entirely.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Bend at waist, not knees. Two inches is a mile.</p></div>
+          </div>
+
+          <div class="term">
+            <h3 class="term-name">Roll</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">Bend and rotate to let hooks pass over your head.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Rolling takes you under and back up ready to fire.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Duck under a clothesline. A U-shape, not straight down-and-up.</p></div>
+          </div>
         </div>
 
-        <div class="tape-phases">
-          <div class="phase" id="phase-1">
-            <div class="phase-header">
-              <div class="phase-category">The Fundamentals</div>
-              <h3 class="phase-name">Laying Groundwork</h3>
-              <span class="phase-range">Sessions 1-4</span>
-            </div>
-            <p class="phase-desc">You're learning to stand before you walk. Stance, guard, the basic punches. This is where discipline begins—not in speed or power, but in showing up and doing the work.</p>
-            <div class="phase-pips">
-              <span class="pip" data-session="1"></span>
-              <span class="pip" data-session="2"></span>
-              <span class="pip" data-session="3"></span>
-              <span class="pip" data-session="4"></span>
-            </div>
+        <div class="term-group">
+          <div class="term-category">Ring Generalship</div>
+
+          <div class="term">
+            <h3 class="term-name">Footwork</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">How you move. Stepping, pivoting, cutting angles while balanced.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Feet set up everything. In range to land, out of range to get hit.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Push, don't step. Never cross feet. Sliding on ice.</p></div>
           </div>
 
-          <div class="phase" id="phase-2">
-            <div class="phase-header">
-              <div class="phase-category">Defence & Rhythm</div>
-              <h3 class="phase-name">Building Rhythm</h3>
-              <span class="phase-range">Sessions 5-7</span>
-            </div>
-            <p class="phase-desc">The punches are there. Now you learn to breathe between them. Rhythm isn't about going fast—it's about knowing when to go and when to wait.</p>
-            <div class="phase-pips">
-              <span class="pip" data-session="5"></span>
-              <span class="pip" data-session="6"></span>
-              <span class="pip" data-session="7"></span>
-            </div>
-          </div>
-
-          <div class="phase" id="phase-3">
-            <div class="phase-header">
-              <div class="phase-category">Ring IQ</div>
-              <h3 class="phase-name">Holding Your Own</h3>
-              <span class="phase-range">Sessions 8-10</span>
-            </div>
-            <p class="phase-desc">You can throw. You can move. Now you learn to stay in the pocket when it gets uncomfortable. This is where the work pays off—not in winning, but in not quitting.</p>
-            <div class="phase-pips">
-              <span class="pip" data-session="8"></span>
-              <span class="pip" data-session="9"></span>
-              <span class="pip" data-session="10"></span>
-            </div>
+          <div class="term">
+            <h3 class="term-name">Range</h3>
+            <div class="term-def"><span class="term-label">What</span><p class="term-text">Distance between you and target. Long, mid, close—different tools.</p></div>
+            <div class="term-def"><span class="term-label">Why</span><p class="term-text">Punches only work at specific distances.</p></div>
+            <div class="term-def"><span class="term-label">How</span><p class="term-text">Jab is your measuring stick. Fully extended is long range.</p></div>
           </div>
         </div>
       </div>
@@ -1168,501 +781,417 @@
 
     <!-- CORNER VIEW -->
     <div class="view" id="view-corner">
-      <div class="page">
-        <a href="#" class="page-back" data-view="programme">← Back</a>
+      <header class="page-header">
+        <a href="#" class="page-back" data-view="programme">← Programme</a>
         <h1 class="page-title">Corner</h1>
         <p class="page-subtitle">Between rounds</p>
+      </header>
 
-        <div class="corner-section">
-          <h2>About Sofa2Slugger</h2>
-          <p>Audio-only boxing training. No screens to watch, no scores to chase.</p>
-          <p>Sessions are structured around boxing fundamentals: stance, movement, punches, combinations. You follow along at your own pace. The app guides with voice cues only.</p>
-          <p>No performance tracking. No pressure. Just practice.</p>
-        </div>
+      <div class="corner-section">
+        <h2>About</h2>
+        <p>Audio-only boxing training. No screens to watch, no scores to chase. Sessions are structured around fundamentals: stance, movement, punches, combinations.</p>
+        <p>You follow along at your own pace. No performance tracking. No pressure. Just practice.</p>
+      </div>
 
-        <div class="corner-section">
-          <h2>Common Questions</h2>
+      <div class="corner-section">
+        <h2>Questions</h2>
+        <div class="qa"><p class="qa-q">Is this for beginners?</p><p class="qa-a">Yes. Built for people who've never boxed, or who feel intimidated by gyms.</p></div>
+        <div class="qa"><p class="qa-q">Do I need equipment?</p><p class="qa-a">None. Just space and something comfortable to wear.</p></div>
+        <div class="qa"><p class="qa-q">Why audio?</p><p class="qa-a">Boxing is about timing and awareness—not copying shapes on a screen.</p></div>
+        <div class="qa"><p class="qa-q">What if I can't keep up?</p><p class="qa-a">You're not meant to. Go at your own pace, repeat sessions freely.</p></div>
+        <div class="qa"><p class="qa-q">Is there a subscription?</p><p class="qa-a">No. One payment, lifetime access.</p></div>
+      </div>
 
-          <div class="qa-item">
-            <p class="qa-q">Is this actually for beginners?</p>
-            <p class="qa-a">Yes. It was built specifically for people who have never boxed, or who feel intimidated by gyms and classes.</p>
-          </div>
+      <div class="corner-section">
+        <h2>Support</h2>
+        <p>Questions? <a href="mailto:fightback@sofa2slugger.com" class="link-email">fightback@sofa2slugger.com</a></p>
+      </div>
 
-          <div class="qa-item">
-            <p class="qa-q">Do I need equipment?</p>
-            <p class="qa-a">None. Just some space and something comfortable to wear.</p>
-          </div>
-
-          <div class="qa-item">
-            <p class="qa-q">Why audio instead of video?</p>
-            <p class="qa-a">Because boxing is about timing, balance, and awareness—not copying shapes on a screen.</p>
-          </div>
-
-          <div class="qa-item">
-            <p class="qa-q">What if I can't keep up?</p>
-            <p class="qa-a">You're not meant to "keep up". Go at your own pace, pause when needed, repeat sessions freely.</p>
-          </div>
-
-          <div class="qa-item">
-            <p class="qa-q">Is there a subscription?</p>
-            <p class="qa-a">No. You pay once and get the programme forever.</p>
-          </div>
-
-          <div class="qa-item">
-            <p class="qa-q">What happens after Session 10?</p>
-            <p class="qa-a">You'll have a solid foundation—enough to repeat, progress, or step into a gym if you choose.</p>
-          </div>
-        </div>
-
-        <div class="corner-section">
-          <h2>Support</h2>
-          <p>For help or questions: <a href="mailto:fightback@sofa2slugger.com" class="support-email">fightback@sofa2slugger.com</a></p>
-        </div>
-
-        <div class="corner-section">
-          <h2>Reset App</h2>
-          <p>Clear your session progress on this device. This removes locally stored data only.</p>
-          <button class="reset-btn" id="btn-reset">Reset session data</button>
-        </div>
+      <div class="corner-section">
+        <h2>Reset</h2>
+        <p>Clear session progress on this device.</p>
+        <button class="btn-reset" id="btn-reset">Reset data</button>
       </div>
     </div>
 
   </div>
 
-  <!-- ========== BOTTOM NAV ========== -->
+  <!-- NAV -->
   <nav class="nav">
-    <ul class="nav-list">
-      <li><a href="#" class="nav-item active" data-view="programme"><span class="nav-icon">◉</span>Programme</a></li>
-      <li><a href="#" class="nav-item" data-view="fightiq"><span class="nav-icon">◈</span>Fight IQ</a></li>
-      <li><a href="#" class="nav-item" data-view="progress"><span class="nav-icon">◧</span>Progress</a></li>
-      <li><a href="#" class="nav-item" data-view="corner"><span class="nav-icon">◪</span>Corner</a></li>
-    </ul>
+    <div class="nav-inner">
+      <a href="#" class="nav-item active" data-view="programme">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+        Programme
+      </a>
+      <a href="#" class="nav-item" data-view="fightiq">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Fight IQ
+      </a>
+      <a href="#" class="nav-item" data-view="corner">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Corner
+      </a>
+    </div>
   </nav>
 
-  <!-- ========== PLAYER OVERLAY ========== -->
+  <!-- PLAYER -->
   <div class="player-overlay" id="player-overlay">
     <div class="player">
       <button class="player-close" id="player-close">×</button>
-      <div class="player-session">SESSION</div>
-      <div class="player-number" id="player-number">1</div>
+      <div class="player-label">Session</div>
+      <div class="player-num" id="player-num">1</div>
       <div class="player-title" id="player-title">Where It Begins</div>
-      <div class="player-phase" id="player-phase"></div>
+      <div class="player-status" id="player-status"></div>
       <div class="player-controls">
-        <button class="player-btn player-btn-stop" id="player-stop" title="Stop">■</button>
-        <button class="player-btn player-btn-main" id="player-toggle" title="Play/Pause">▶</button>
+        <button class="player-btn player-btn-stop" id="player-stop">■</button>
+        <button class="player-btn player-btn-main" id="player-toggle">▶</button>
       </div>
     </div>
   </div>
 
-  <!-- ========== SCRIPTS ========== -->
   <script src="./soundscape.js"></script>
   <script>
-    // ==========================================================================
-    // SESSION DATA
-    // ==========================================================================
-    const SESSIONS = [
-      { num: 1, name: 'Where It Begins', focus: 'Introduction & Stance' },
-      { num: 2, name: 'Finding Your Base', focus: 'Stance & Balance' },
-      { num: 3, name: 'The First Tool', focus: 'The Jab' },
-      { num: 4, name: 'Bringing It Through', focus: 'The Cross' },
-      { num: 5, name: 'Settling Into Rhythm', focus: 'Combinations' },
-      { num: 6, name: 'Holding Your Shape', focus: 'Guard & Defence' },
-      { num: 7, name: 'Choosing When', focus: 'Timing & Rhythm' },
-      { num: 8, name: 'Knowing the Distance', focus: 'Range & Footwork' },
-      { num: 9, name: 'Staying Protected', focus: 'Defence Under Pressure' },
-      { num: 10, name: 'The Full Round', focus: 'Putting It Together' }
+    // ══════════════════════════════════════════════════════════════════════════
+    // DATA
+    // ══════════════════════════════════════════════════════════════════════════
+    const PHASES = [
+      {
+        id: 1,
+        label: 'The Fundamentals',
+        title: 'Laying Groundwork',
+        sessions: [
+          { num: 1, name: 'Where It Begins', focus: 'Introduction' },
+          { num: 2, name: 'Finding Your Base', focus: 'Stance' },
+          { num: 3, name: 'The First Tool', focus: 'Jab' },
+          { num: 4, name: 'Bringing It Through', focus: 'Cross' }
+        ]
+      },
+      {
+        id: 2,
+        label: 'Defence & Rhythm',
+        title: 'Building Rhythm',
+        sessions: [
+          { num: 5, name: 'Settling Into Rhythm', focus: 'Combinations' },
+          { num: 6, name: 'Holding Your Shape', focus: 'Guard' },
+          { num: 7, name: 'Choosing When', focus: 'Timing' }
+        ]
+      },
+      {
+        id: 3,
+        label: 'Ring IQ',
+        title: 'Holding Your Own',
+        sessions: [
+          { num: 8, name: 'Knowing the Distance', focus: 'Range' },
+          { num: 9, name: 'Staying Protected', focus: 'Defence' },
+          { num: 10, name: 'The Full Round', focus: 'Integration' }
+        ]
+      }
     ];
 
-    // ==========================================================================
-    // STATE MANAGEMENT
-    // ==========================================================================
-    const STORAGE_KEYS = {
-      SPLASH_SEEN: 'sofa2slugger_splash_seen',
-      PURCHASE_UNLOCKED: 'purchaseUnlocked',
-      SESSION_COMPLETED_PREFIX: 'sofa2slugger_session_'
+    const STORAGE = {
+      SPLASH: 'sofa2slugger_splash',
+      UNLOCKED: 'purchaseUnlocked',
+      SESSION: n => `sofa2slugger_s${n}`
     };
 
+    // ══════════════════════════════════════════════════════════════════════════
+    // STATE
+    // ══════════════════════════════════════════════════════════════════════════
     function getState() {
       const completed = [];
       for (let i = 1; i <= 10; i++) {
-        if (localStorage.getItem(STORAGE_KEYS.SESSION_COMPLETED_PREFIX + i) === 'true') {
-          completed.push(i);
-        }
+        if (localStorage.getItem(STORAGE.SESSION(i)) === '1') completed.push(i);
       }
       return {
-        splashSeen: localStorage.getItem(STORAGE_KEYS.SPLASH_SEEN) === 'true',
-        purchaseUnlocked: localStorage.getItem(STORAGE_KEYS.PURCHASE_UNLOCKED) === 'true',
-        completedSessions: completed,
-        highestCompleted: completed.length > 0 ? Math.max(...completed) : 0
+        splashSeen: localStorage.getItem(STORAGE.SPLASH) === '1',
+        unlocked: localStorage.getItem(STORAGE.UNLOCKED) === 'true',
+        completed,
+        next: completed.length === 0 ? 1 : Math.min(Math.max(...completed) + 1, 10)
       };
     }
 
-    function markSessionComplete(sessionNum) {
-      localStorage.setItem(STORAGE_KEYS.SESSION_COMPLETED_PREFIX + sessionNum, 'true');
+    function markComplete(n) {
+      localStorage.setItem(STORAGE.SESSION(n), '1');
     }
 
-    function isSessionPlayable(sessionNum) {
-      if (sessionNum === 1) return true;
-      return getState().purchaseUnlocked;
+    function canPlay(n) {
+      return n === 1 || getState().unlocked;
     }
 
-    function getNextSession() {
-      const state = getState();
-      if (state.completedSessions.length === 0) return 1;
-      const next = state.highestCompleted + 1;
-      return next <= 10 ? next : 1;
-    }
-
-    // ==========================================================================
-    // SPLASH SCREEN
-    // ==========================================================================
+    // ══════════════════════════════════════════════════════════════════════════
+    // SPLASH
+    // ══════════════════════════════════════════════════════════════════════════
     const splash = document.getElementById('splash');
 
     function dismissSplash() {
       splash.classList.add('hidden');
-      localStorage.setItem(STORAGE_KEYS.SPLASH_SEEN, 'true');
+      localStorage.setItem(STORAGE.SPLASH, '1');
     }
 
     if (getState().splashSeen) {
       splash.classList.add('hidden');
     } else {
       splash.addEventListener('click', dismissSplash);
-      setTimeout(dismissSplash, 4000);
+      setTimeout(dismissSplash, 2500);
     }
 
-    // ==========================================================================
-    // VIEW NAVIGATION
-    // ==========================================================================
-    function showView(viewId) {
+    // ══════════════════════════════════════════════════════════════════════════
+    // NAVIGATION
+    // ══════════════════════════════════════════════════════════════════════════
+    function showView(id) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById('view-' + viewId).classList.add('active');
-
+      document.getElementById('view-' + id)?.classList.add('active');
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.querySelector(`.nav-item[data-view="${viewId}"]`)?.classList.add('active');
-
-      if (viewId === 'programme') renderProgramme();
-      if (viewId === 'progress') renderProgress();
+      document.querySelector(`.nav-item[data-view="${id}"]`)?.classList.add('active');
+      if (id === 'programme') renderProgramme();
     }
 
     document.querySelectorAll('[data-view]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        showView(el.dataset.view);
-      });
+      el.addEventListener('click', e => { e.preventDefault(); showView(el.dataset.view); });
     });
 
-    // ==========================================================================
-    // RENDER PROGRAMME VIEW
-    // ==========================================================================
+    // ══════════════════════════════════════════════════════════════════════════
+    // RENDER PROGRAMME
+    // ══════════════════════════════════════════════════════════════════════════
+    let expandedPhase = 1;
+
     function renderProgramme() {
       const state = getState();
-      const container = document.getElementById('sessions-list');
-      container.innerHTML = '';
-
-      const nextSession = getNextSession();
+      const phasesEl = document.getElementById('phases');
       const ctaMain = document.getElementById('cta-main');
-      const ctaPurchase = document.getElementById('cta-purchase');
-      const purchaseSection = document.getElementById('purchase-section');
-      const progressSummary = document.getElementById('progress-summary');
+      const unlockPrompt = document.getElementById('unlock-prompt');
+      const progressEl = document.getElementById('programme-progress');
+      const dotsEl = document.getElementById('progress-dots');
 
-      // Update main CTA
-      if (state.completedSessions.length > 0 && nextSession <= 10) {
-        ctaMain.textContent = `Continue Session ${nextSession}`;
-      } else if (state.completedSessions.length === 10) {
-        ctaMain.textContent = 'Replay Programme';
+      // Determine which phase should be expanded
+      if (state.completed.length === 0) {
+        expandedPhase = 1;
+      } else if (state.completed.length <= 4) {
+        expandedPhase = 1;
+      } else if (state.completed.length <= 7) {
+        expandedPhase = 2;
       } else {
+        expandedPhase = 3;
+      }
+
+      // CTA
+      if (state.completed.length === 0) {
         ctaMain.textContent = 'Begin Session 1';
-      }
-
-      // Show/hide purchase CTA
-      if (!state.purchaseUnlocked && state.completedSessions.includes(1)) {
-        ctaPurchase.style.display = 'block';
+      } else if (state.completed.length < 10) {
+        ctaMain.textContent = `Continue Session ${state.next}`;
       } else {
-        ctaPurchase.style.display = 'none';
+        ctaMain.textContent = 'Start Again';
       }
 
-      // Show/hide purchase section
-      purchaseSection.style.display = state.purchaseUnlocked ? 'none' : 'block';
-
-      // Progress bar
-      if (state.completedSessions.length > 0) {
-        progressSummary.style.display = 'block';
-        document.getElementById('progress-fill').style.width = (state.completedSessions.length * 10) + '%';
-        document.getElementById('progress-label').textContent = state.completedSessions.length + '/10';
-      } else {
-        progressSummary.style.display = 'none';
-      }
-
-      // Render session cards
-      SESSIONS.forEach(session => {
-        const playable = isSessionPlayable(session.num);
-        const completed = state.completedSessions.includes(session.num);
-        const isCurrent = session.num === nextSession;
-        const isLocked = !playable;
-
-        const card = document.createElement('div');
-        card.className = 'session-card';
-        if (isLocked) card.classList.add('locked');
-        if (completed) card.classList.add('completed');
-        if (isCurrent && !isLocked) card.classList.add('current');
-
-        let statusHtml = '';
-        if (session.num === 1 && !completed) {
-          statusHtml = '<span class="session-status status-free">Free</span>';
-        } else if (isLocked) {
-          statusHtml = '<span class="session-status status-locked">Locked</span>';
-        } else if (completed) {
-          statusHtml = '<span class="session-status status-completed">✓ Done</span>';
+      // Progress dots
+      if (state.completed.length > 0) {
+        progressEl.style.display = 'flex';
+        dotsEl.innerHTML = '';
+        for (let i = 1; i <= 10; i++) {
+          const dot = document.createElement('span');
+          dot.className = 'progress-dot';
+          if (state.completed.includes(i)) dot.classList.add('complete');
+          if (i === state.next && !state.completed.includes(i)) dot.classList.add('current');
+          dotsEl.appendChild(dot);
         }
+      } else {
+        progressEl.style.display = 'none';
+      }
 
-        card.innerHTML = `
-          <span class="session-number">${String(session.num).padStart(2, '0')}</span>
-          <div class="session-info">
-            <div class="session-name">${session.name}</div>
-            <div class="session-meta">
-              <span>${session.focus}</span>
-              ${statusHtml}
+      // Unlock prompt
+      if (!state.unlocked && state.completed.includes(1)) {
+        unlockPrompt.classList.remove('hidden');
+      } else if (state.unlocked) {
+        unlockPrompt.classList.add('hidden');
+      }
+
+      // Phases
+      phasesEl.innerHTML = '';
+      PHASES.forEach(phase => {
+        const phaseCompleted = phase.sessions.filter(s => state.completed.includes(s.num)).length;
+        const isExpanded = phase.id === expandedPhase;
+
+        const phaseEl = document.createElement('div');
+        phaseEl.className = 'phase' + (isExpanded ? ' expanded' : '');
+
+        phaseEl.innerHTML = `
+          <div class="phase-header" data-phase="${phase.id}">
+            <div class="phase-info">
+              <span class="phase-label">${phase.label}</span>
+              <span class="phase-title">${phase.title}</span>
+            </div>
+            <div class="phase-meta">
+              <span class="phase-count">${phaseCompleted}/${phase.sessions.length}</span>
+              <div class="phase-pips">
+                ${phase.sessions.map(s => `<span class="phase-pip${state.completed.includes(s.num) ? ' complete' : ''}"></span>`).join('')}
+              </div>
+              <span class="phase-chevron">▾</span>
             </div>
           </div>
-          ${isLocked
-            ? '<span class="session-lock-icon">🔒</span>'
-            : `<button class="session-action" data-session="${session.num}">${completed ? 'Replay' : 'Play'}</button>`
-          }
+          <div class="phase-sessions">
+            ${phase.sessions.map(s => {
+              const locked = !canPlay(s.num);
+              const done = state.completed.includes(s.num);
+              const current = s.num === state.next && !done;
+              let status = '';
+              if (s.num === 1 && !done) status = '<span class="session-status status-free">Free</span>';
+              else if (locked) status = '<span class="session-status status-locked">Locked</span>';
+              else if (done) status = '<span class="session-status status-done">✓</span>';
+              return `
+                <div class="session${locked ? ' locked' : ''}${current ? ' current' : ''}" data-session="${s.num}">
+                  <span class="session-num">${String(s.num).padStart(2, '0')}</span>
+                  <div class="session-content">
+                    <div class="session-name">${s.name}</div>
+                    <div class="session-focus">${s.focus}</div>
+                  </div>
+                  ${status}
+                </div>
+              `;
+            }).join('')}
+          </div>
         `;
 
-        if (!isLocked) {
-          card.addEventListener('click', () => playSession(session.num));
-        }
+        phasesEl.appendChild(phaseEl);
+      });
 
-        container.appendChild(card);
+      // Phase toggle listeners
+      document.querySelectorAll('.phase-header').forEach(header => {
+        header.addEventListener('click', () => {
+          const phaseId = parseInt(header.dataset.phase);
+          expandedPhase = expandedPhase === phaseId ? 0 : phaseId;
+          document.querySelectorAll('.phase').forEach(p => {
+            const id = parseInt(p.querySelector('.phase-header').dataset.phase);
+            p.classList.toggle('expanded', id === expandedPhase);
+          });
+        });
+      });
+
+      // Session click listeners
+      document.querySelectorAll('.session:not(.locked)').forEach(s => {
+        s.addEventListener('click', () => playSession(parseInt(s.dataset.session)));
       });
     }
 
-    // ==========================================================================
-    // RENDER PROGRESS VIEW
-    // ==========================================================================
-    function renderProgress() {
-      const state = getState();
-      const completed = state.completedSessions.length;
+    // ══════════════════════════════════════════════════════════════════════════
+    // PLAYER
+    // ══════════════════════════════════════════════════════════════════════════
+    let player = null;
+    let currentSession = null;
 
-      // Update level
-      const levelName = document.getElementById('level-name');
-      const levelCount = document.getElementById('level-count');
-      levelCount.textContent = `${completed} of 10`;
-
-      if (completed === 0) {
-        levelName.textContent = 'Not Started';
-      } else if (completed <= 4) {
-        levelName.textContent = 'Laying Groundwork';
-      } else if (completed <= 7) {
-        levelName.textContent = 'Building Rhythm';
-      } else if (completed < 10) {
-        levelName.textContent = 'Holding Your Own';
-      } else {
-        levelName.textContent = 'Complete';
-      }
-
-      // Update phase states
-      const phases = [
-        { id: 'phase-1', range: [1, 4] },
-        { id: 'phase-2', range: [5, 7] },
-        { id: 'phase-3', range: [8, 10] }
-      ];
-
-      phases.forEach((phase, idx) => {
-        const el = document.getElementById(phase.id);
-        el.classList.remove('active', 'done');
-
-        const phaseCompleted = state.completedSessions.filter(
-          s => s >= phase.range[0] && s <= phase.range[1]
-        ).length;
-        const phaseTotal = phase.range[1] - phase.range[0] + 1;
-
-        if (phaseCompleted === phaseTotal) {
-          el.classList.add('done');
-        } else if (phaseCompleted > 0 || (idx === 0 && completed === 0)) {
-          el.classList.add('active');
-        } else if (idx > 0) {
-          const prevPhase = phases[idx - 1];
-          const prevCompleted = state.completedSessions.filter(
-            s => s >= prevPhase.range[0] && s <= prevPhase.range[1]
-          ).length;
-          if (prevCompleted === (prevPhase.range[1] - prevPhase.range[0] + 1)) {
-            el.classList.add('active');
-          }
-        }
-      });
-
-      // Update pips
-      document.querySelectorAll('.pip').forEach(pip => {
-        const sessionNum = parseInt(pip.dataset.session);
-        pip.classList.toggle('complete', state.completedSessions.includes(sessionNum));
-      });
-    }
-
-    // ==========================================================================
-    // AUDIO PLAYER
-    // ==========================================================================
-    let currentPlayer = null;
-    let currentSessionNum = null;
-
-    const playerOverlay = document.getElementById('player-overlay');
-    const playerNumber = document.getElementById('player-number');
+    const overlay = document.getElementById('player-overlay');
+    const playerNum = document.getElementById('player-num');
     const playerTitle = document.getElementById('player-title');
-    const playerPhase = document.getElementById('player-phase');
+    const playerStatus = document.getElementById('player-status');
     const playerToggle = document.getElementById('player-toggle');
-    const playerStop = document.getElementById('player-stop');
-    const playerClose = document.getElementById('player-close');
 
-    function playSession(sessionNum) {
-      if (!isSessionPlayable(sessionNum)) return;
-      if (currentPlayer) {
-        currentPlayer.stop();
-      }
+    function playSession(n) {
+      if (!canPlay(n)) return;
+      if (player) player.stop();
 
-      currentSessionNum = sessionNum;
-      const session = SESSIONS[sessionNum - 1];
+      currentSession = n;
+      const session = PHASES.flatMap(p => p.sessions).find(s => s.num === n);
 
-      playerNumber.textContent = sessionNum;
+      playerNum.textContent = n;
       playerTitle.textContent = session.name;
-      playerPhase.textContent = 'Loading...';
+      playerStatus.textContent = 'Loading...';
       playerToggle.textContent = '▶';
-      playerOverlay.classList.add('active');
+      overlay.classList.add('active');
 
       const onComplete = () => {
-        markSessionComplete(sessionNum);
-        playerPhase.textContent = 'Session complete';
-        playerToggle.textContent = '▶';
-        currentPlayer = null;
-
-        setTimeout(() => {
-          closePlayer();
-          renderProgramme();
-          renderProgress();
-        }, 2000);
+        markComplete(n);
+        playerStatus.textContent = 'Complete';
+        player = null;
+        setTimeout(() => { closePlayer(); renderProgramme(); }, 1500);
       };
 
-      currentPlayer = new SoundscapePlayer(sessionNum, onComplete);
-      currentPlayer.init().then(() => {
-        playerPhase.textContent = 'Ready';
+      player = new SoundscapePlayer(n, onComplete);
+      player.init().then(() => {
+        playerStatus.textContent = '';
         startPlayback();
       }).catch(() => {
-        playerPhase.textContent = 'Error loading audio';
+        playerStatus.textContent = 'Error loading';
       });
     }
 
     function startPlayback() {
-      if (!currentPlayer) return;
-      currentPlayer.play();
+      if (!player) return;
+      player.play();
       playerToggle.textContent = '⏸';
-      updatePhaseDisplay();
+      updateStatus();
     }
 
-    function updatePhaseDisplay() {
-      if (!currentPlayer) return;
-      const phase = currentPlayer.currentPhase;
-      const phases = {
-        'intro': 'Introduction',
-        'training': 'Training',
-        'outro': 'Cool down'
-      };
-      playerPhase.textContent = phases[phase] || phase;
-
-      if (phase !== 'idle' && currentPlayer) {
-        setTimeout(updatePhaseDisplay, 500);
-      }
+    function updateStatus() {
+      if (!player) return;
+      const labels = { intro: 'Introduction', training: 'Training', outro: 'Cool down' };
+      playerStatus.textContent = labels[player.currentPhase] || '';
+      if (player.currentPhase !== 'idle') setTimeout(updateStatus, 400);
     }
 
     function stopPlayback() {
-      if (currentPlayer) {
-        currentPlayer.stop();
-        currentPlayer = null;
-      }
+      if (player) { player.stop(); player = null; }
       playerToggle.textContent = '▶';
-      playerPhase.textContent = 'Stopped';
+      playerStatus.textContent = 'Stopped';
     }
 
     function closePlayer() {
       stopPlayback();
-      playerOverlay.classList.remove('active');
-      currentSessionNum = null;
+      overlay.classList.remove('active');
+      currentSession = null;
     }
 
     playerToggle.addEventListener('click', () => {
-      if (!currentPlayer) {
-        playSession(currentSessionNum);
-      } else if (currentPlayer.currentPhase === 'idle') {
-        startPlayback();
-      }
+      if (!player && currentSession) playSession(currentSession);
+      else if (player?.currentPhase === 'idle') startPlayback();
     });
 
-    playerStop.addEventListener('click', stopPlayback);
-    playerClose.addEventListener('click', closePlayer);
-    playerOverlay.addEventListener('click', (e) => {
-      if (e.target === playerOverlay) closePlayer();
-    });
+    document.getElementById('player-stop').addEventListener('click', stopPlayback);
+    document.getElementById('player-close').addEventListener('click', closePlayer);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closePlayer(); });
 
-    // ==========================================================================
-    // CTA HANDLERS
-    // ==========================================================================
+    // ══════════════════════════════════════════════════════════════════════════
+    // ACTIONS
+    // ══════════════════════════════════════════════════════════════════════════
     document.getElementById('cta-main').addEventListener('click', () => {
-      const next = getNextSession();
-      playSession(next);
+      const state = getState();
+      playSession(state.completed.length === 10 ? 1 : state.next);
     });
 
-    document.getElementById('cta-purchase').addEventListener('click', () => {
-      window.location.href = 'https://buy.stripe.com/dRm7sM73Y3E80Unctn8k801';
-    });
-
-    document.getElementById('btn-purchase').addEventListener('click', () => {
+    document.getElementById('btn-unlock').addEventListener('click', () => {
       window.location.href = 'https://buy.stripe.com/dRm7sM73Y3E80Unctn8k801';
     });
 
     document.getElementById('btn-reset').addEventListener('click', () => {
-      if (confirm('Reset all session data on this device?')) {
-        for (let i = 1; i <= 10; i++) {
-          localStorage.removeItem(STORAGE_KEYS.SESSION_COMPLETED_PREFIX + i);
-        }
-        localStorage.removeItem(STORAGE_KEYS.SPLASH_SEEN);
+      if (confirm('Reset all progress?')) {
+        for (let i = 1; i <= 10; i++) localStorage.removeItem(STORAGE.SESSION(i));
+        localStorage.removeItem(STORAGE.SPLASH);
         location.reload();
       }
     });
 
-    // ==========================================================================
+    // ══════════════════════════════════════════════════════════════════════════
     // STRIPE VERIFICATION
-    // ==========================================================================
-    async function checkPurchaseSuccess() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const sessionId = urlParams.get('session_id');
-
-      if (sessionId) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-
-        try {
-          const response = await fetch('/.netlify/functions/stripe-verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ session_id: sessionId })
-          });
-
-          const result = await response.json();
-
-          if (result.ok === true) {
-            localStorage.setItem(STORAGE_KEYS.PURCHASE_UNLOCKED, 'true');
-            renderProgramme();
-          }
-        } catch (error) {
-          // Silent failure
+    // ══════════════════════════════════════════════════════════════════════════
+    (async () => {
+      const sessionId = new URLSearchParams(location.search).get('session_id');
+      if (!sessionId) return;
+      history.replaceState({}, '', location.pathname);
+      try {
+        const res = await fetch('/.netlify/functions/stripe-verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId })
+        });
+        if ((await res.json()).ok) {
+          localStorage.setItem(STORAGE.UNLOCKED, 'true');
+          renderProgramme();
         }
-      }
-    }
+      } catch {}
+    })();
 
-    // ==========================================================================
+    // ══════════════════════════════════════════════════════════════════════════
     // INIT
-    // ==========================================================================
-    checkPurchaseSuccess();
+    // ══════════════════════════════════════════════════════════════════════════
     renderProgramme();
   </script>
-
 </body>
 </html>
