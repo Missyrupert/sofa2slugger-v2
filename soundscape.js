@@ -34,12 +34,28 @@ class SoundscapePlayer {
     this.introBuffer = null;
     this.trainingBuffer = null;
     this.outroBuffer = null;
+    this.bellBuffer = null; // Session 9 and Session 10 bell sound
     
     this.currentPhase = 'idle'; // idle, intro, training, outro
     this.musicLoopSources = []; // Track all active music sources for cleanup
     this.aborted = false; // Hard abort flag - prevents all sequencing when true
     this.sessionNumber = sessionNumber;
     this.onSessionComplete = onSessionComplete;
+    
+    // Session 9 bell timing (timestamps in seconds from playback start)
+    // Session 10 bell timing (timestamps in seconds from playback start)
+    if (this.sessionNumber === 9) {
+      this.bellTimings = [333, 393, 422, 482, 510, 570];
+    } else if (this.sessionNumber === 10) {
+      this.bellTimings = [330, 510]; // Start of round, End of round
+    } else {
+      this.bellTimings = [];
+    }
+    this.bellFired = new Set(); // Track which bells have fired
+    this.playbackStartTime = null; // AudioContext time when playback started
+    this.totalPausedTime = 0; // Accumulated paused duration
+    this.pauseStartTime = null; // AudioContext time when paused
+    this.bellCheckInterval = null; // Timer for checking bell timings
   }
 
   async init() {
@@ -85,17 +101,29 @@ class SoundscapePlayer {
     const sessionFolder = `session-${String(this.sessionNumber).padStart(2, '0')}`;
     const basePath = `assets/audio/${sessionFolder}/`;
     
-    const [introData, trainingData, outroData, musicData] = await Promise.all([
+    const filePromises = [
       this.fetchAudioFile(`${basePath}intro.mp3`),
       this.fetchAudioFile(`${basePath}training.mp3`),
       this.fetchAudioFile(`${basePath}outro.mp3`),
       this.fetchAudioFile(`${basePath}music.mp3`)
-    ]);
+    ];
     
-    this.introBuffer = await this.audioContext.decodeAudioData(introData);
-    this.trainingBuffer = await this.audioContext.decodeAudioData(trainingData);
-    this.outroBuffer = await this.audioContext.decodeAudioData(outroData);
-    this.musicBuffer = await this.audioContext.decodeAudioData(musicData);
+    // Load bell file for Session 9 and Session 10
+    if (this.sessionNumber === 9 || this.sessionNumber === 10) {
+      filePromises.push(this.fetchAudioFile(`${basePath}bell`));
+    }
+    
+    const results = await Promise.all(filePromises);
+    
+    this.introBuffer = await this.audioContext.decodeAudioData(results[0]);
+    this.trainingBuffer = await this.audioContext.decodeAudioData(results[1]);
+    this.outroBuffer = await this.audioContext.decodeAudioData(results[2]);
+    this.musicBuffer = await this.audioContext.decodeAudioData(results[3]);
+    
+    // Decode bell buffer for Session 9 and Session 10
+    if (this.sessionNumber === 9 || this.sessionNumber === 10) {
+      this.bellBuffer = await this.audioContext.decodeAudioData(results[4]);
+    }
   }
 
   async fetchAudioFile(url) {
@@ -120,6 +148,15 @@ class SoundscapePlayer {
     this.runId = nextRunId();
     this.aborted = false;
     
+    // Reset bell state for Session 9 and Session 10
+    if (this.sessionNumber === 9 || this.sessionNumber === 10) {
+      this.bellFired.clear();
+      this.playbackStartTime = this.audioContext.currentTime;
+      this.totalPausedTime = 0;
+      this.pauseStartTime = null;
+      this.startBellCheck();
+    }
+    
     this.currentPhase = 'intro';
     this.playIntro();
   }
@@ -132,6 +169,12 @@ class SoundscapePlayer {
     
     // Set abort flag - prevents all future sequencing
     this.aborted = true;
+    
+    // Stop bell checking for Session 9 and Session 10
+    if (this.bellCheckInterval) {
+      clearInterval(this.bellCheckInterval);
+      this.bellCheckInterval = null;
+    }
     
     // Stop all music loop sources
     this.musicLoopSources.forEach(source => {
@@ -166,6 +209,9 @@ class SoundscapePlayer {
     this.musicGainNode = null;
     this.voiceGainNode = null;
     this.currentPhase = 'idle';
+    this.playbackStartTime = null;
+    this.totalPausedTime = 0;
+    this.pauseStartTime = null;
   }
 
   playIntro() {
@@ -291,6 +337,80 @@ class SoundscapePlayer {
     };
     
     this.voiceSource.start(0);
+  }
+
+  // Session 9 and Session 10 bell timing logic
+  startBellCheck() {
+    if ((this.sessionNumber !== 9 && this.sessionNumber !== 10) || !this.bellTimings.length) return;
+    
+    // Clear any existing interval
+    if (this.bellCheckInterval) {
+      clearInterval(this.bellCheckInterval);
+    }
+    
+    // Check bell timings every 100ms for precision
+    this.bellCheckInterval = setInterval(() => {
+      if (this.aborted || !this.audioContext || this.audioContext.state === 'closed') {
+        clearInterval(this.bellCheckInterval);
+        this.bellCheckInterval = null;
+        return;
+      }
+      
+      if (!this.playbackStartTime) return;
+      
+      const currentTime = this.audioContext.currentTime;
+      
+      // If audio context is suspended, don't advance playback time
+      if (this.audioContext.state === 'suspended') {
+        // Adjust playbackStartTime to account for the pause
+        if (this.pauseStartTime === null) {
+          this.pauseStartTime = currentTime;
+        }
+        lastCheckTime = currentTime;
+        return;
+      }
+      
+      // If resuming from suspension, adjust playbackStartTime
+      if (this.pauseStartTime !== null) {
+        const pauseDuration = currentTime - this.pauseStartTime;
+        this.totalPausedTime += pauseDuration;
+        this.pauseStartTime = null;
+      }
+      
+      // Calculate elapsed playback time (excluding paused time)
+      const elapsedTime = currentTime - this.playbackStartTime - this.totalPausedTime;
+      
+      // Check each bell timing
+      this.bellTimings.forEach(timing => {
+        // Fire bell if we've reached or passed the timing and it hasn't fired yet
+        // Use a small tolerance (0.1s) to account for interval timing
+        // Note: If playback jumps past a timing, it will fire once when we reach it
+        if (elapsedTime >= timing - 0.1 && !this.bellFired.has(timing)) {
+          this.playBell();
+          this.bellFired.add(timing);
+        }
+      });
+      
+      // Stop checking if all bells have fired
+      if (this.bellFired.size === this.bellTimings.length) {
+        clearInterval(this.bellCheckInterval);
+        this.bellCheckInterval = null;
+      }
+    }, 100);
+  }
+
+  playBell() {
+    if (!this.bellBuffer || !this.audioContext || this.aborted) return;
+    if (this.audioContext.state === 'closed' || this.audioContext.state === 'suspended') return;
+    
+    try {
+      const bellSource = this.audioContext.createBufferSource();
+      bellSource.buffer = this.bellBuffer;
+      bellSource.connect(this.audioContext.destination);
+      bellSource.start(0);
+    } catch (e) {
+      // Silent failure - bell may have already been cleaned up
+    }
   }
 }
 

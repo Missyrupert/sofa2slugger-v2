@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#181818">
   <meta name="description" content="Beginner boxing. Audio-guided. No gym.">
   <title>Sofa2Slugger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,12 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #0a0a0a;
-      --bg-surface: #111111;
-      --bg-elevated: #181818;
-      --bg-hover: #1f1f1f;
+      /* Tier-1 Emotional Theme Tokens - Softened from near-black to lifted dark tones */
+      --bg-base: #181818;
+      --bg-surface: #252525;
+      --bg-elevated: #303030;
+      --bg-hover: #383838;
 
-      --text-primary: rgba(255, 255, 255, 0.95);
+      /* Text tokens - softened from pure white to warm white */
+      --text-primary: #f0f0f0;
       --text-secondary: rgba(255, 255, 255, 0.55);
       --text-tertiary: rgba(255, 255, 255, 0.35);
       --text-muted: rgba(255, 255, 255, 0.15);
@@ -37,9 +39,10 @@
       --space-2xl: 48px;
       --space-3xl: 72px;
 
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      /* Surface tokens - increased border radius for softer edges */
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -152,116 +155,19 @@
     .btn-primary:hover { opacity: 0.9; }
     .btn-primary:active { transform: scale(0.98); }
 
-    /* Progress indicator (inline, subtle) */
-    .programme-progress {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-sm);
-      margin-top: var(--space-md);
-      font-size: 0.75rem;
-      color: var(--text-tertiary);
-    }
-
-    .progress-dots {
-      display: flex;
-      gap: 3px;
-    }
-
-    .progress-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--bg-elevated);
-    }
-
-    .progress-dot.complete { background: var(--text-tertiary); }
-    .progress-dot.current { background: var(--text-primary); }
+    /* Progress indicator removed - aligns with "no progress theatre" philosophy */
 
     /* ══════════════════════════════════════════════════════════════════════════
-       PHASES (Session Groups)
+       SESSIONS LIST
        ══════════════════════════════════════════════════════════════════════════ */
     .phases {
       display: flex;
       flex-direction: column;
-      gap: var(--space-lg);
-    }
-
-    .phase {
+      gap: 0;
       background: var(--bg-surface);
       border-radius: var(--radius-lg);
       overflow: hidden;
     }
-
-    .phase-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-md) var(--space-lg);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .phase-header:hover { background: var(--bg-elevated); }
-
-    .phase-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .phase-label {
-      font-size: 0.65rem;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .phase-title {
-      font-size: 0.95rem;
-      font-weight: 400;
-    }
-
-    .phase-meta {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .phase-count {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-    }
-
-    .phase-pips {
-      display: flex;
-      gap: 3px;
-    }
-
-    .phase-pip {
-      width: 4px;
-      height: 12px;
-      background: var(--bg-hover);
-      border-radius: 1px;
-    }
-
-    .phase-pip.complete { background: var(--text-tertiary); }
-
-    .phase-chevron {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      transition: transform 0.2s;
-    }
-
-    .phase.expanded .phase-chevron { transform: rotate(180deg); }
-
-    .phase-sessions {
-      display: none;
-      border-top: 1px solid var(--bg-elevated);
-    }
-
-    .phase.expanded .phase-sessions { display: block; }
 
     /* ══════════════════════════════════════════════════════════════════════════
        SESSION CARDS
@@ -293,13 +199,15 @@
     .session-content { flex: 1; min-width: 0; }
 
     .session-name {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 400;
       color: var(--text-primary);
+      margin-bottom: 2px;
     }
 
     .session-focus {
       font-size: 0.75rem;
-      color: var(--text-tertiary);
+      color: var(--text-secondary);
       margin-top: 1px;
     }
 
@@ -547,7 +455,7 @@
     .player-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.70);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -572,24 +480,18 @@
 
     .player-overlay.active .player { transform: scale(1); }
 
-    .player-label {
-      font-size: 0.65rem;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-    }
-
     .player-num {
-      font-family: Georgia, serif;
-      font-size: 3.5rem;
-      font-weight: 400;
-      margin: var(--space-xs) 0;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
     }
 
     .player-title {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      margin-bottom: var(--space-xl);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
     }
 
     .player-status {
@@ -646,7 +548,6 @@
        ══════════════════════════════════════════════════════════════════════════ */
     @media (max-width: 480px) {
       .app { padding: var(--space-lg) var(--space-sm); }
-      .phase-header { padding: var(--space-sm) var(--space-md); }
       .session { padding: var(--space-sm) var(--space-md); }
       .term-def { flex-direction: column; gap: 2px; }
       .term-label { width: auto; }
@@ -670,10 +571,7 @@
         <h1 class="programme-brand">Sofa<span class="a">2</span>Slugger</h1>
         <p class="programme-tagline">10 sessions. Real boxing fundamentals. Just listen and move.</p>
         <div class="programme-cta">
-          <button class="btn-primary" id="cta-main">Begin Session 1</button>
-        </div>
-        <div class="programme-progress" id="programme-progress" style="display:none;">
-          <div class="progress-dots" id="progress-dots"></div>
+          <button class="btn-primary" id="cta-main">Begin The Base</button>
         </div>
       </header>
 
@@ -838,9 +736,9 @@
   <div class="player-overlay" id="player-overlay">
     <div class="player">
       <button class="player-close" id="player-close">×</button>
-      <div class="player-label">Session</div>
-      <div class="player-num" id="player-num">1</div>
-      <div class="player-title" id="player-title">Where It Begins</div>
+      <div class="player-num" id="player-num">01</div>
+      <div class="player-title" id="player-title"></div>
+      <div class="player-subtitle" id="player-subtitle" style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 4px; margin-bottom: var(--space-lg);"></div>
       <div class="player-status" id="player-status"></div>
       <div class="player-controls">
         <button class="player-btn player-btn-stop" id="player-stop">■</button>
@@ -854,38 +752,17 @@
     // ══════════════════════════════════════════════════════════════════════════
     // DATA
     // ══════════════════════════════════════════════════════════════════════════
-    const PHASES = [
-      {
-        id: 1,
-        label: 'The Fundamentals',
-        title: 'Laying Groundwork',
-        sessions: [
-          { num: 1, name: 'Where It Begins', focus: 'Introduction' },
-          { num: 2, name: 'Finding Your Base', focus: 'Stance' },
-          { num: 3, name: 'The First Tool', focus: 'Jab' },
-          { num: 4, name: 'Bringing It Through', focus: 'Cross' }
-        ]
-      },
-      {
-        id: 2,
-        label: 'Defence & Rhythm',
-        title: 'Building Rhythm',
-        sessions: [
-          { num: 5, name: 'Settling Into Rhythm', focus: 'Combinations' },
-          { num: 6, name: 'Holding Your Shape', focus: 'Guard' },
-          { num: 7, name: 'Choosing When', focus: 'Timing' }
-        ]
-      },
-      {
-        id: 3,
-        label: 'Ring IQ',
-        title: 'Holding Your Own',
-        sessions: [
-          { num: 8, name: 'Knowing the Distance', focus: 'Range' },
-          { num: 9, name: 'Staying Protected', focus: 'Defence' },
-          { num: 10, name: 'The Full Round', focus: 'Integration' }
-        ]
-      }
+    const SESSIONS = [
+      { num: 1, title: 'The Base', subtitle: 'Stance, Guard, Jab' },
+      { num: 2, title: 'Straight Lines', subtitle: 'The Cross & One-Two' },
+      { num: 3, title: 'Off the Centre', subtitle: 'Head Movement' },
+      { num: 4, title: 'Close Range', subtitle: 'Hook & Uppercut' },
+      { num: 5, title: 'Changing Levels', subtitle: 'Body Shots & Footwork' },
+      { num: 6, title: 'Off the Line', subtitle: 'Lateral Movement' },
+      { num: 7, title: 'First Responses', subtitle: 'Block, Slip, Move' },
+      { num: 8, title: 'Answer Back', subtitle: 'Simple Counters' },
+      { num: 9, title: 'Let It Run', subtitle: 'Three Silent Rounds' },
+      { num: 10, title: 'The Round', subtitle: 'Integration' }
     ];
 
     const STORAGE = {
@@ -953,49 +830,20 @@
     // ══════════════════════════════════════════════════════════════════════════
     // RENDER PROGRAMME
     // ══════════════════════════════════════════════════════════════════════════
-    let expandedPhase = 1;
-
     function renderProgramme() {
       const state = getState();
       const phasesEl = document.getElementById('phases');
       const ctaMain = document.getElementById('cta-main');
       const unlockPrompt = document.getElementById('unlock-prompt');
-      const progressEl = document.getElementById('programme-progress');
-      const dotsEl = document.getElementById('progress-dots');
-
-      // Determine which phase should be expanded
-      if (state.completed.length === 0) {
-        expandedPhase = 1;
-      } else if (state.completed.length <= 4) {
-        expandedPhase = 1;
-      } else if (state.completed.length <= 7) {
-        expandedPhase = 2;
-      } else {
-        expandedPhase = 3;
-      }
 
       // CTA
       if (state.completed.length === 0) {
-        ctaMain.textContent = 'Begin Session 1';
+        ctaMain.textContent = 'Begin The Base';
       } else if (state.completed.length < 10) {
-        ctaMain.textContent = `Continue Session ${state.next}`;
+        const nextSession = SESSIONS.find(s => s.num === state.next);
+        ctaMain.textContent = `Continue ${nextSession.title}`;
       } else {
         ctaMain.textContent = 'Start Again';
-      }
-
-      // Progress dots
-      if (state.completed.length > 0) {
-        progressEl.style.display = 'flex';
-        dotsEl.innerHTML = '';
-        for (let i = 1; i <= 10; i++) {
-          const dot = document.createElement('span');
-          dot.className = 'progress-dot';
-          if (state.completed.includes(i)) dot.classList.add('complete');
-          if (i === state.next && !state.completed.includes(i)) dot.classList.add('current');
-          dotsEl.appendChild(dot);
-        }
-      } else {
-        progressEl.style.display = 'none';
       }
 
       // Unlock prompt
@@ -1005,66 +853,35 @@
         unlockPrompt.classList.add('hidden');
       }
 
-      // Phases
+      // Sessions list
       phasesEl.innerHTML = '';
-      PHASES.forEach(phase => {
-        const phaseCompleted = phase.sessions.filter(s => state.completed.includes(s.num)).length;
-        const isExpanded = phase.id === expandedPhase;
-
-        const phaseEl = document.createElement('div');
-        phaseEl.className = 'phase' + (isExpanded ? ' expanded' : '');
-
-        phaseEl.innerHTML = `
-          <div class="phase-header" data-phase="${phase.id}">
-            <div class="phase-info">
-              <span class="phase-label">${phase.label}</span>
-              <span class="phase-title">${phase.title}</span>
-            </div>
-            <div class="phase-meta">
-              <span class="phase-count">${phaseCompleted}/${phase.sessions.length}</span>
-              <div class="phase-pips">
-                ${phase.sessions.map(s => `<span class="phase-pip${state.completed.includes(s.num) ? ' complete' : ''}"></span>`).join('')}
-              </div>
-              <span class="phase-chevron">▾</span>
-            </div>
+      const sessionsContainer = document.createElement('div');
+      sessionsContainer.className = 'phases';
+      
+      SESSIONS.forEach(s => {
+        const locked = !canPlay(s.num);
+        const done = state.completed.includes(s.num);
+        const current = s.num === state.next && !done;
+        let status = '';
+        if (s.num === 1 && !done) status = '<span class="session-status status-free">Free</span>';
+        else if (locked) status = '<span class="session-status status-locked">Locked</span>';
+        else if (done) status = '<span class="session-status status-done">✓</span>';
+        
+        const sessionEl = document.createElement('div');
+        sessionEl.className = `session${locked ? ' locked' : ''}${current ? ' current' : ''}`;
+        sessionEl.dataset.session = s.num;
+        sessionEl.innerHTML = `
+          <span class="session-num">${String(s.num).padStart(2, '0')}</span>
+          <div class="session-content">
+            <div class="session-name">${s.title}</div>
+            <div class="session-focus">${s.subtitle}</div>
           </div>
-          <div class="phase-sessions">
-            ${phase.sessions.map(s => {
-              const locked = !canPlay(s.num);
-              const done = state.completed.includes(s.num);
-              const current = s.num === state.next && !done;
-              let status = '';
-              if (s.num === 1 && !done) status = '<span class="session-status status-free">Free</span>';
-              else if (locked) status = '<span class="session-status status-locked">Locked</span>';
-              else if (done) status = '<span class="session-status status-done">✓</span>';
-              return `
-                <div class="session${locked ? ' locked' : ''}${current ? ' current' : ''}" data-session="${s.num}">
-                  <span class="session-num">${String(s.num).padStart(2, '0')}</span>
-                  <div class="session-content">
-                    <div class="session-name">${s.name}</div>
-                    <div class="session-focus">${s.focus}</div>
-                  </div>
-                  ${status}
-                </div>
-              `;
-            }).join('')}
-          </div>
+          ${status}
         `;
-
-        phasesEl.appendChild(phaseEl);
+        sessionsContainer.appendChild(sessionEl);
       });
-
-      // Phase toggle listeners
-      document.querySelectorAll('.phase-header').forEach(header => {
-        header.addEventListener('click', () => {
-          const phaseId = parseInt(header.dataset.phase);
-          expandedPhase = expandedPhase === phaseId ? 0 : phaseId;
-          document.querySelectorAll('.phase').forEach(p => {
-            const id = parseInt(p.querySelector('.phase-header').dataset.phase);
-            p.classList.toggle('expanded', id === expandedPhase);
-          });
-        });
-      });
+      
+      phasesEl.appendChild(sessionsContainer);
 
       // Session click listeners
       document.querySelectorAll('.session:not(.locked)').forEach(s => {
@@ -1089,10 +906,11 @@
       if (player) player.stop();
 
       currentSession = n;
-      const session = PHASES.flatMap(p => p.sessions).find(s => s.num === n);
+      const session = SESSIONS.find(s => s.num === n);
 
-      playerNum.textContent = n;
-      playerTitle.textContent = session.name;
+      playerNum.textContent = String(n).padStart(2, '0');
+      playerTitle.textContent = session.title;
+      document.getElementById('player-subtitle').textContent = session.subtitle;
       playerStatus.textContent = 'Loading...';
       playerToggle.textContent = '▶';
       overlay.classList.add('active');
