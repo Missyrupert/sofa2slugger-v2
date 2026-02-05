@@ -22,16 +22,20 @@ AUDIO_BASE="$HOME/Sofa2Slugger-v2/assets/audio"
 OUTPUT_DIR="$AUDIO_BASE/mixed_sessions"
 SR=44100
 
+# ── Gain ────────────────────────────────────────────────────
+VOICE_GAIN=9          # dB boost for voice tracks
+MUSIC_GAIN=-30        # dB reduction for music
+
 # ── Voice EQ ─────────────────────────────────────────────────
 #  HP 80 Hz     remove rumble
 #  -3 dB @ 200  reduce mud
 #  +4 dB @ 2.5k presence / clarity
 #  +2 dB @ 8k   air / intelligibility
-VOICE_EQ="highpass=f=80,equalizer=f=200:t=q:w=1:g=-3,equalizer=f=2500:t=q:w=1.5:g=4,equalizer=f=8000:t=q:w=1:g=2"
+VOICE_EQ="highpass=f=80,equalizer=f=200:t=q:w=1:g=-3,equalizer=f=2500:t=q:w=1.5:g=4,equalizer=f=8000:t=q:w=1:g=2,volume=${VOICE_GAIN}dB"
 
 # ── Music EQ (carve voice presence band) ─────────────────────
 #  Three overlapping cuts across 1-4 kHz
-MUSIC_EQ="equalizer=f=1500:t=q:w=0.8:g=-6,equalizer=f=2500:t=q:w=1:g=-8,equalizer=f=3500:t=q:w=0.8:g=-6"
+MUSIC_EQ="volume=${MUSIC_GAIN}dB,equalizer=f=1500:t=q:w=0.8:g=-6,equalizer=f=2500:t=q:w=1:g=-8,equalizer=f=3500:t=q:w=0.8:g=-6"
 
 # ── Sidechain compression ────────────────────────────────────
 SC_THRESH=0.02    # low threshold — duck on any voice
@@ -218,8 +222,8 @@ printf '════════════════════════
 printf '  Sofa2Slugger Professional Audio Mixer\n'
 printf '══════════════════════════════════════════════\n'
 printf '  Target: %d LUFS integrated, %d dB true peak\n' "$LU_I" "$LU_TP"
-printf '  Voice EQ: HP 80, presence +4 dB, air +2 dB\n'
-printf '  Music: 1-4 kHz carve, sidechain %d:1\n' "$SC_RATIO"
+printf '  Voice: +%d dB gain, EQ (HP 80, presence +4, air +2)\n' "$VOICE_GAIN"
+printf '  Music: %d dB gain, 1-4 kHz carve, sidechain %d:1\n' "$MUSIC_GAIN" "$SC_RATIO"
 printf '══════════════════════════════════════════════\n'
 
 mkdir -p "$OUTPUT_DIR"
