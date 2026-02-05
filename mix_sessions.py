@@ -29,16 +29,13 @@ def mix_session(session_num):
     # Duck the music (make it quieter)
     music_ducked = music + MUSIC_REDUCTION_DB
     
-    # For sessions 9 and 10, load the bell
+    # For sessions 9 and 10, load the bell from Golden_Box
     bell = None
     if session_num in [9, 10]:
-        # Check for bell.mp3 or bell (no extension)
-        bell_path = session_folder / "bell.mp3"
-        if not bell_path.exists():
-            bell_path = session_folder / "bell"
+        bell_path = AUDIO_BASE_PATH / "Golden_Box" / "bell"
         if bell_path.exists():
-            bell = AudioSegment.from_mp3(bell_path)
-            print(f"   🔔 Bell loaded for Session {session_num}")
+            bell = AudioSegment.from_file(bell_path)[:500]  # Trim to 0.5 seconds
+            print(f"   🔔 Bell loaded (0.5s) for Session {session_num}")
     
     # Calculate timing for music overlay
     # Music should play during the training section
