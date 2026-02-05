@@ -4,8 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#181818">
-  <meta name="description" content="Beginner boxing. Audio-guided. No gym.">
-  <title>Sofa2Slugger</title>
+  <meta name="description" content="Beginner boxing. Audio-guided. No gym. Shadowboxing for complete beginners—private, judgement-free, no equipment needed.">
+  <title>Sofa2Slugger | Audio Boxing for Complete Beginners</title>
+
+  <!-- Google Analytics placeholder -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -450,6 +459,263 @@
     .btn-reset:hover { background: rgba(194, 58, 58, 0.25); }
 
     /* ══════════════════════════════════════════════════════════════════════════
+       CONVERSION SECTIONS
+       ══════════════════════════════════════════════════════════════════════════ */
+
+    /* Session 1 Promise - Reassurance Card */
+    .promise-section {
+      margin: var(--space-xl) 0;
+      padding: var(--space-lg);
+      background: linear-gradient(135deg, rgba(58, 140, 90, 0.08) 0%, rgba(58, 140, 90, 0.03) 100%);
+      border: 1px solid rgba(58, 140, 90, 0.2);
+      border-radius: var(--radius-lg);
+    }
+
+    .promise-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+      color: var(--text-primary);
+    }
+
+    .promise-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: var(--space-sm);
+    }
+
+    .promise-text:last-child { margin-bottom: 0; }
+
+    .promise-highlight {
+      display: inline-block;
+      margin-top: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    /* Shadowboxing Callout */
+    .shadowbox-callout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .shadowbox-callout span { color: var(--text-tertiary); }
+
+    /* Audio Sample Section */
+    .sample-section {
+      margin: var(--space-2xl) 0;
+      padding: var(--space-lg);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+    }
+
+    .sample-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+
+    .sample-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .sample-player {
+      width: 100%;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+    }
+
+    .sample-player::-webkit-media-controls-panel {
+      background: var(--bg-elevated);
+    }
+
+    /* Video Section */
+    .video-section {
+      margin: var(--space-2xl) 0;
+    }
+
+    .video-header {
+      margin-bottom: var(--space-md);
+    }
+
+    .video-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+
+    .video-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .video-container iframe,
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Money-Back Guarantee */
+    .guarantee-badge {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--bg-elevated);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--success);
+    }
+
+    .guarantee-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--success);
+    }
+
+    .guarantee-content {
+      flex: 1;
+    }
+
+    .guarantee-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .guarantee-text {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* Story Section */
+    .story-section {
+      margin: var(--space-2xl) 0;
+      padding: var(--space-lg);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+    }
+
+    .story-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: var(--space-md);
+      color: var(--text-primary);
+    }
+
+    .story-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: var(--space-sm);
+    }
+
+    .story-text:last-child { margin-bottom: 0; }
+
+    /* Testimonials */
+    .testimonials-section {
+      margin: var(--space-2xl) 0;
+    }
+
+    .testimonials-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-lg);
+      text-align: center;
+    }
+
+    .testimonials-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .testimonial {
+      padding: var(--space-md);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+    }
+
+    .testimonial-quote {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-style: italic;
+      margin-bottom: var(--space-sm);
+    }
+
+    .testimonial-quote::before { content: '"'; }
+    .testimonial-quote::after { content: '"'; }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .testimonial-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .testimonial-name {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
        PLAYER MODAL
        ══════════════════════════════════════════════════════════════════════════ */
     .player-overlay {
@@ -551,6 +817,10 @@
       .session { padding: var(--space-sm) var(--space-md); }
       .term-def { flex-direction: column; gap: 2px; }
       .term-label { width: auto; }
+      .promise-section { padding: var(--space-md); }
+      .sample-section { padding: var(--space-md); }
+      .story-section { padding: var(--space-md); }
+      .testimonial { padding: var(--space-sm) var(--space-md); }
     }
   </style>
 </head>
@@ -573,7 +843,41 @@
         <div class="programme-cta">
           <button class="btn-primary" id="cta-main">Begin The Base</button>
         </div>
+        <div class="shadowbox-callout">
+          <span>●</span> No equipment needed—this is shadowboxing. Private. Judgement-free.
+        </div>
       </header>
+
+      <!-- SESSION 1 PROMISE -->
+      <div class="promise-section">
+        <h2 class="promise-title">What Session 1 Is Really Like</h2>
+        <p class="promise-text">Session 1 requires zero fitness, zero coordination, and zero experience. You won't punch hard. You won't "train". You'll simply move, listen, and finish feeling capable.</p>
+        <p class="promise-text">This is shadowboxing—no bag, no gym, no mirrors, no judgement. Just you and the voice in your ear.</p>
+        <span class="promise-highlight">✓ Complete beginners welcome</span>
+      </div>
+
+      <!-- AUDIO SAMPLE -->
+      <div class="sample-section">
+        <h2 class="sample-title">Hear What Coaching Sounds Like</h2>
+        <p class="sample-subtitle">This is real instruction from an actual session. Not a trailer. Not music. Just coaching.</p>
+        <audio class="sample-player" controls preload="none">
+          <source src="assets/audio/sample-preview.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="video-section">
+        <div class="video-header">
+          <h2 class="video-title">See the Basics</h2>
+          <p class="video-subtitle">New to boxing? Watch this 2-minute guide to the basic stance and punches. Then dive into Session 1.</p>
+        </div>
+        <div class="video-container">
+          <!-- Replace VIDEO_ID with actual YouTube video ID -->
+          <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe> -->
+          <div class="video-placeholder">Video coming soon</div>
+        </div>
+      </div>
 
       <div class="phases" id="phases"></div>
 
@@ -581,6 +885,65 @@
         <p class="unlock-text">Sessions 2–10 unlock with a single payment.</p>
         <p class="unlock-price">£9.99 <small>one-time</small></p>
         <button class="btn-unlock" id="btn-unlock">Unlock Full Programme</button>
+        <div class="guarantee-badge">
+          <svg class="guarantee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <div class="guarantee-content">
+            <div class="guarantee-title">30-Day Money-Back Guarantee</div>
+            <div class="guarantee-text">If you don't feel more capable and confident by Session 3, we'll refund you in full. No questions asked.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW IT WAS BUILT -->
+      <div class="story-section">
+        <h2 class="story-title">How Sofa2Slugger Was Built</h2>
+        <p class="story-text">This program was created in Scotland by studying the progressions and philosophies of the world's most respected boxing coaches. Every session was refined with input from a professional boxing trainer to ensure proper technique, safety, and real progression.</p>
+        <p class="story-text">The result: 10 audio-guided sessions that take you from complete beginner to confident slugger—no gym, no mirrors, no judgement. Just solid fundamentals, delivered with care.</p>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="testimonials-section">
+        <h3 class="testimonials-title">What People Are Saying</h3>
+        <div class="testimonials-grid">
+          <div class="testimonial">
+            <p class="testimonial-quote">This changed how I feel about my body.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">S</div>
+              <span class="testimonial-name">Sarah, Edinburgh</span>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-quote">I never thought I'd feel confident throwing a punch.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">M</div>
+              <span class="testimonial-name">Mark, London</span>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-quote">Finally, a boxing program that doesn't intimidate me.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">J</div>
+              <span class="testimonial-name">Jamie, Glasgow</span>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-quote">By Session 10, I felt like a different person.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">R</div>
+              <span class="testimonial-name">Rachel, Manchester</span>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-quote">Best tenner I've ever spent on myself.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">D</div>
+              <span class="testimonial-name">David, Bristol</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -687,17 +1050,18 @@
 
       <div class="corner-section">
         <h2>About</h2>
-        <p>Audio-only boxing training. No screens to watch, no scores to chase. Sessions are structured around fundamentals: stance, movement, punches, combinations.</p>
-        <p>You follow along at your own pace. No performance tracking. No pressure. Just practice.</p>
+        <p><strong>This is shadowboxing</strong>—audio-only boxing training you do at home, in private. No screens to watch, no scores to chase, no equipment needed. Just you, headphones, and space to move.</p>
+        <p>Sessions are structured around real boxing fundamentals: stance, movement, punches, combinations. You follow along at your own pace. No performance tracking. No pressure. Just practice.</p>
       </div>
 
       <div class="corner-section">
         <h2>Questions</h2>
-        <div class="qa"><p class="qa-q">Is this for beginners?</p><p class="qa-a">Yes. Built for people who've never boxed, or who feel intimidated by gyms.</p></div>
-        <div class="qa"><p class="qa-q">Do I need equipment?</p><p class="qa-a">None. Just space and something comfortable to wear.</p></div>
-        <div class="qa"><p class="qa-q">Why audio?</p><p class="qa-a">Boxing is about timing and awareness—not copying shapes on a screen.</p></div>
-        <div class="qa"><p class="qa-q">What if I can't keep up?</p><p class="qa-a">You're not meant to. Go at your own pace, repeat sessions freely.</p></div>
-        <div class="qa"><p class="qa-q">Is there a subscription?</p><p class="qa-a">No. One payment, lifetime access.</p></div>
+        <div class="qa"><p class="qa-q">Is this for complete beginners?</p><p class="qa-a">Absolutely. Built specifically for people who've never boxed, or who feel intimidated by gyms. Session 1 assumes zero experience.</p></div>
+        <div class="qa"><p class="qa-q">Do I need equipment?</p><p class="qa-a">None at all. This is shadowboxing—no bag, no gloves. Just space to move and something comfortable to wear.</p></div>
+        <div class="qa"><p class="qa-q">Why audio-only?</p><p class="qa-a">Boxing is about timing, rhythm, and body awareness—not copying shapes on a screen. Audio lets you focus on how movement feels, not how it looks.</p></div>
+        <div class="qa"><p class="qa-q">Can anyone see me?</p><p class="qa-a">No. This is completely private. Train in your living room, bedroom, garden—wherever feels comfortable. No camera, no mirrors, no judgement.</p></div>
+        <div class="qa"><p class="qa-q">What if I can't keep up?</p><p class="qa-a">You're not meant to at first. Go at your own pace, pause when needed, repeat sessions freely. There's no wrong way to progress.</p></div>
+        <div class="qa"><p class="qa-q">Is there a subscription?</p><p class="qa-a">No. One payment of £9.99, lifetime access to all 10 sessions. Session 1 is free—try it first.</p></div>
       </div>
 
       <div class="corner-section">
