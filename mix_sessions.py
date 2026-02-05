@@ -12,7 +12,8 @@ from pydub import AudioSegment
 # Configuration
 AUDIO_BASE_PATH = Path.home() / "Sofa2Slugger-v2" / "assets" / "audio"
 OUTPUT_DIR = AUDIO_BASE_PATH / "mixed_sessions"
-MUSIC_REDUCTION_DB = -20  # How much quieter the music should be (adjust if needed)
+MUSIC_REDUCTION_DB = -25  # How much quieter the music should be
+VOICE_BOOST_DB = 3        # How much louder the voice should be
 
 def mix_session(session_num):
     """Mix audio files for a single session."""
@@ -25,7 +26,12 @@ def mix_session(session_num):
     training = AudioSegment.from_mp3(session_folder / "training.mp3")
     outro = AudioSegment.from_mp3(session_folder / "outro.mp3")
     music = AudioSegment.from_mp3(session_folder / "music.mp3")
-    
+
+    # Boost voice tracks
+    intro = intro + VOICE_BOOST_DB
+    training = training + VOICE_BOOST_DB
+    outro = outro + VOICE_BOOST_DB
+
     # Duck the music (make it quieter)
     music_ducked = music + MUSIC_REDUCTION_DB
     
@@ -102,7 +108,8 @@ def main():
     print("=" * 60)
     print("🥊 SOFA2SLUGGER AUDIO MIXER 🥊")
     print("=" * 60)
-    print(f"\nMusic reduction: {MUSIC_REDUCTION_DB}dB")
+    print(f"\nVoice boost: +{VOICE_BOOST_DB}dB")
+    print(f"Music reduction: {MUSIC_REDUCTION_DB}dB")
     print(f"Audio source: {AUDIO_BASE_PATH}")
     
     # Create output directory
