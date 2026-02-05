@@ -62,7 +62,7 @@
       font-family: var(--font);
       background: var(--bg-base);
       color: var(--text-primary);
-      line-height: 1.5;
+      line-height: 1.6;
       min-height: 100vh;
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
@@ -195,7 +195,7 @@
     .session:first-child { border-top: none; }
     .session:hover:not(.locked) { background: var(--bg-hover); }
 
-    .session.locked { opacity: 0.4; cursor: default; }
+    .session.locked { opacity: 0.45; cursor: default; }
     .session.current { background: var(--bg-elevated); }
 
     .session-num {
@@ -203,6 +203,61 @@
       font-size: 0.8rem;
       color: var(--text-tertiary);
       width: 24px;
+    }
+
+    .session-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      background: var(--bg-elevated);
+    }
+
+    .session-badge--current {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .session-badge--done {
+      background: rgba(58, 140, 90, 0.2);
+      color: var(--success);
+      font-size: 0.9rem;
+    }
+
+    .session-teaser {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .session-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+
+    .session-icon--done {
+      color: var(--success);
+    }
+
+    .session-free {
+      background: linear-gradient(135deg, rgba(58, 140, 90, 0.06) 0%, transparent 100%);
+    }
+
+    .session-done {
+      opacity: 0.75;
+    }
+
+    .session.current {
+      border-left: 3px solid var(--accent);
     }
 
     .session-content { flex: 1; min-width: 0; }
@@ -511,6 +566,104 @@
 
     .shadowbox-callout span { color: var(--text-tertiary); }
 
+    .shadowbox-callout--standalone {
+      margin-top: var(--space-xl);
+      padding: var(--space-md);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       COLLAPSIBLE SECTIONS (details/summary)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .collapsible-section {
+      margin-top: var(--space-xl);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .collapsible-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      transition: background 0.15s;
+    }
+
+    .collapsible-summary:hover {
+      background: var(--bg-hover);
+    }
+
+    .collapsible-summary::-webkit-details-marker { display: none; }
+    .collapsible-summary::marker { display: none; content: ''; }
+
+    .collapsible-summary::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-right: 1.5px solid var(--text-tertiary);
+      border-bottom: 1.5px solid var(--text-tertiary);
+      transform: rotate(-45deg);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-left: var(--space-md);
+    }
+
+    .collapsible-section[open] > .collapsible-summary::after {
+      transform: rotate(45deg);
+    }
+
+    .collapsible-content {
+      padding: 0 var(--space-lg) var(--space-lg);
+    }
+
+    .collapsible-content .promise-section,
+    .collapsible-content .sample-section,
+    .collapsible-content .story-section,
+    .collapsible-content .testimonials-section {
+      margin: 0;
+      padding: 0;
+      background: none;
+      border: none;
+      border-radius: 0;
+    }
+
+    /* Text containers max-width for readability */
+    .promise-text,
+    .story-text,
+    .sample-subtitle {
+      max-width: 65ch;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION DIVIDERS
+       ══════════════════════════════════════════════════════════════════════════ */
+    .collapsible-section + .collapsible-section::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--bg-elevated);
+      margin: 0 auto;
+      position: relative;
+      top: calc(var(--space-xl) * -0.5);
+    }
+
+    .unlock-prompt + .collapsible-section::before,
+    .shadowbox-callout--standalone + .unlock-prompt::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--bg-elevated);
+      margin: 0 auto;
+    }
+
     /* Audio Sample Section */
     .sample-section {
       margin: var(--space-2xl) 0;
@@ -812,15 +965,41 @@
     /* ══════════════════════════════════════════════════════════════════════════
        RESPONSIVE
        ══════════════════════════════════════════════════════════════════════════ */
-    @media (max-width: 480px) {
-      .app { padding: var(--space-lg) var(--space-sm); }
+
+    /* Small phones (375px and below) */
+    @media (max-width: 375px) {
+      .app { padding: var(--space-md) var(--space-xs); padding-bottom: 100px; }
+      .session { padding: var(--space-sm) var(--space-sm); }
+      .session-teaser { display: none; }
+      .session-badge { width: 30px; height: 30px; font-size: 0.7rem; }
+      .btn-primary { width: 100%; }
+      .btn-unlock { width: 100%; justify-content: center; }
+      .programme-tagline { font-size: 0.8rem; }
+      .collapsible-summary { padding: var(--space-sm) var(--space-md); font-size: 0.8rem; }
+      .collapsible-content { padding: 0 var(--space-md) var(--space-md); }
+      .term-def { flex-direction: column; gap: 2px; }
+      .term-label { width: auto; }
+    }
+
+    /* Standard mobile (376px - 767px) */
+    @media (min-width: 376px) and (max-width: 767px) {
+      .app { padding: var(--space-lg) var(--space-sm); padding-bottom: 100px; }
       .session { padding: var(--space-sm) var(--space-md); }
       .term-def { flex-direction: column; gap: 2px; }
       .term-label { width: auto; }
-      .promise-section { padding: var(--space-md); }
-      .sample-section { padding: var(--space-md); }
-      .story-section { padding: var(--space-md); }
-      .testimonial { padding: var(--space-sm) var(--space-md); }
+      body { font-size: 0.95rem; }
+    }
+
+    /* Tablets (768px+) */
+    @media (min-width: 768px) {
+      .app { max-width: 620px; }
+      .programme-brand { font-size: 1.5rem; }
+      .programme-tagline { font-size: 0.9rem; }
+    }
+
+    /* Desktop (1024px+) */
+    @media (min-width: 1024px) {
+      .app { max-width: 680px; }
     }
   </style>
 </head>
@@ -839,47 +1018,18 @@
     <div class="view active" id="view-programme">
       <header class="programme-header">
         <h1 class="programme-brand">Sofa<span class="a">2</span>Slugger</h1>
-        <p class="programme-tagline">10 sessions. Real boxing fundamentals. Just listen and move.</p>
+        <p class="programme-tagline">Audio-guided boxing for complete beginners. No gym. No equipment. Just press play.</p>
         <div class="programme-cta">
-          <button class="btn-primary" id="cta-main">Begin The Base</button>
-        </div>
-        <div class="shadowbox-callout">
-          <span>●</span> No equipment needed—this is shadowboxing. Private. Judgement-free.
+          <button class="btn-primary" id="cta-main">Start Session 1 Free</button>
         </div>
       </header>
 
-      <!-- SESSION 1 PROMISE -->
-      <div class="promise-section">
-        <h2 class="promise-title">What Session 1 Is Really Like</h2>
-        <p class="promise-text">Session 1 requires zero fitness, zero coordination, and zero experience. You won't punch hard. You won't "train". You'll simply move, listen, and finish feeling capable.</p>
-        <p class="promise-text">This is shadowboxing—no bag, no gym, no mirrors, no judgement. Just you and the voice in your ear.</p>
-        <span class="promise-highlight">✓ Complete beginners welcome</span>
-      </div>
-
-      <!-- AUDIO SAMPLE -->
-      <div class="sample-section">
-        <h2 class="sample-title">Hear What Coaching Sounds Like</h2>
-        <p class="sample-subtitle">This is real instruction from an actual session. Not a trailer. Not music. Just coaching.</p>
-        <audio class="sample-player" controls preload="none">
-          <source src="assets/audio/sample-preview.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <!-- VIDEO -->
-      <div class="video-section">
-        <div class="video-header">
-          <h2 class="video-title">See the Basics</h2>
-          <p class="video-subtitle">New to boxing? Watch this 2-minute guide to the basic stance and punches. Then dive into Session 1.</p>
-        </div>
-        <div class="video-container">
-          <!-- Replace VIDEO_ID with actual YouTube video ID -->
-          <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe> -->
-          <div class="video-placeholder">Video coming soon</div>
-        </div>
-      </div>
-
       <div class="phases" id="phases"></div>
+
+      <!-- SHADOWBOX CALLOUT (relocated from header) -->
+      <div class="shadowbox-callout shadowbox-callout--standalone">
+        <span>●</span> No equipment needed—this is shadowboxing. Private. Judgement-free.
+      </div>
 
       <div class="unlock-prompt hidden" id="unlock-prompt">
         <p class="unlock-text">Sessions 2–10 unlock with a single payment.</p>
@@ -897,54 +1047,87 @@
         </div>
       </div>
 
-      <!-- HOW IT WAS BUILT -->
-      <div class="story-section">
-        <h2 class="story-title">How Sofa2Slugger Was Built</h2>
-        <p class="story-text">This program was created in Scotland by studying the progressions and philosophies of the world's most respected boxing coaches. Every session was refined with input from a professional boxing trainer to ensure proper technique, safety, and real progression.</p>
-        <p class="story-text">The result: 10 audio-guided sessions that take you from complete beginner to confident slugger—no gym, no mirrors, no judgement. Just solid fundamentals, delivered with care.</p>
-      </div>
+      <!-- SESSION 1 PROMISE (collapsible) -->
+      <details class="collapsible-section">
+        <summary class="collapsible-summary">What Session 1 Is Really Like</summary>
+        <div class="collapsible-content">
+          <div class="promise-section">
+            <p class="promise-text">Zero fitness, zero coordination, zero experience required. You'll simply move, listen, and finish feeling capable.</p>
+            <span class="promise-highlight">✓ Complete beginners welcome</span>
+          </div>
+        </div>
+      </details>
 
-      <!-- TESTIMONIALS -->
-      <div class="testimonials-section">
-        <h3 class="testimonials-title">What People Are Saying</h3>
-        <div class="testimonials-grid">
-          <div class="testimonial">
-            <p class="testimonial-quote">This changed how I feel about my body.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">S</div>
-              <span class="testimonial-name">Sarah, Edinburgh</span>
-            </div>
+      <!-- AUDIO SAMPLE (collapsible, open by default) -->
+      <details class="collapsible-section" open>
+        <summary class="collapsible-summary">Hear What Coaching Sounds Like</summary>
+        <div class="collapsible-content">
+          <div class="sample-section">
+            <p class="sample-subtitle">Real instruction from an actual session. Not a trailer. Not music. Just coaching.</p>
+            <audio class="sample-player" controls preload="none">
+              <source src="assets/audio/sample-preview.mp3" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
           </div>
-          <div class="testimonial">
-            <p class="testimonial-quote">I never thought I'd feel confident throwing a punch.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">M</div>
-              <span class="testimonial-name">Mark, London</span>
-            </div>
+        </div>
+      </details>
+
+      <!-- HOW IT WAS BUILT (collapsible) -->
+      <details class="collapsible-section">
+        <summary class="collapsible-summary">How Sofa2Slugger Was Built</summary>
+        <div class="collapsible-content">
+          <div class="story-section">
+            <p class="story-text">Created in Scotland by studying the progressions of the world's most respected boxing coaches. Every session was refined with input from a professional trainer to ensure proper technique, safety, and real progression.</p>
+            <p class="story-text">The result: 10 audio-guided sessions that take you from complete beginner to confident slugger. Solid fundamentals, delivered with care.</p>
           </div>
-          <div class="testimonial">
-            <p class="testimonial-quote">Finally, a boxing program that doesn't intimidate me.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">J</div>
-              <span class="testimonial-name">Jamie, Glasgow</span>
-            </div>
-          </div>
-          <div class="testimonial">
-            <p class="testimonial-quote">By Session 10, I felt like a different person.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">R</div>
-              <span class="testimonial-name">Rachel, Manchester</span>
-            </div>
-          </div>
-          <div class="testimonial">
-            <p class="testimonial-quote">Best tenner I've ever spent on myself.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">D</div>
-              <span class="testimonial-name">David, Bristol</span>
+        </div>
+      </details>
+
+      <!-- TESTIMONIALS (collapsible) -->
+      <details class="collapsible-section">
+        <summary class="collapsible-summary">What People Are Saying</summary>
+        <div class="collapsible-content">
+          <div class="testimonials-section">
+            <div class="testimonials-grid">
+              <div class="testimonial">
+                <p class="testimonial-quote">This changed how I feel about my body.</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">S</div>
+                  <span class="testimonial-name">Sarah, Edinburgh</span>
+                </div>
+              </div>
+              <div class="testimonial">
+                <p class="testimonial-quote">I never thought I'd feel confident throwing a punch.</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">M</div>
+                  <span class="testimonial-name">Mark, London</span>
+                </div>
+              </div>
+              <div class="testimonial">
+                <p class="testimonial-quote">Finally, a boxing program that doesn't intimidate me.</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">J</div>
+                  <span class="testimonial-name">Jamie, Glasgow</span>
+                </div>
+              </div>
+              <div class="testimonial">
+                <p class="testimonial-quote">By Session 10, I felt like a different person.</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">R</div>
+                  <span class="testimonial-name">Rachel, Manchester</span>
+                </div>
+              </div>
+              <div class="testimonial">
+                <p class="testimonial-quote">Best tenner I've ever spent on myself.</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">D</div>
+                  <span class="testimonial-name">David, Bristol</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </details>
     </div>
 
     <!-- FIGHT IQ VIEW -->
@@ -1128,16 +1311,16 @@
     // DATA
     // ══════════════════════════════════════════════════════════════════════════
     const SESSIONS = [
-      { num: 1, title: 'The Base', subtitle: 'Stance, Guard, Jab' },
-      { num: 2, title: 'Straight Lines', subtitle: 'The Cross & One-Two' },
-      { num: 3, title: 'Off the Centre', subtitle: 'Head Movement' },
-      { num: 4, title: 'Close Range', subtitle: 'Hook & Uppercut' },
-      { num: 5, title: 'Changing Levels', subtitle: 'Body Shots & Footwork' },
-      { num: 6, title: 'Off the Line', subtitle: 'Lateral Movement' },
-      { num: 7, title: 'First Responses', subtitle: 'Block, Slip, Move' },
-      { num: 8, title: 'Answer Back', subtitle: 'Simple Counters' },
-      { num: 9, title: 'Let It Run', subtitle: 'Three Silent Rounds' },
-      { num: 10, title: 'The Round', subtitle: 'Integration' }
+      { num: 1, title: 'The Base', subtitle: 'Stance, Guard, Jab', teaser: 'Stand up, find your stance, and throw your first punch.' },
+      { num: 2, title: 'Straight Lines', subtitle: 'The Cross & One-Two', teaser: 'Add power with your rear hand. Your first real combination.' },
+      { num: 3, title: 'Off the Centre', subtitle: 'Head Movement', teaser: 'Learn to move your head so punches miss.' },
+      { num: 4, title: 'Close Range', subtitle: 'Hook & Uppercut', teaser: 'Curved punches at close range. This is where it gets fun.' },
+      { num: 5, title: 'Changing Levels', subtitle: 'Body Shots & Footwork', teaser: 'Attack high and low. Move your feet with purpose.' },
+      { num: 6, title: 'Off the Line', subtitle: 'Lateral Movement', teaser: 'Step off the centre line and create new angles.' },
+      { num: 7, title: 'First Responses', subtitle: 'Block, Slip, Move', teaser: 'React to incoming fire. Defence starts here.' },
+      { num: 8, title: 'Answer Back', subtitle: 'Simple Counters', teaser: 'Defend, then fire back immediately.' },
+      { num: 9, title: 'Let It Run', subtitle: 'Three Silent Rounds', teaser: 'No instructions. Three rounds. You decide what to throw.' },
+      { num: 10, title: 'The Round', subtitle: 'Integration', teaser: 'Everything together. One full round. You are the fighter now.' }
     ];
 
     const STORAGE = {
@@ -1213,7 +1396,7 @@
 
       // CTA
       if (state.completed.length === 0) {
-        ctaMain.textContent = 'Begin The Base';
+        ctaMain.textContent = 'Start Session 1 Free';
       } else if (state.completed.length < 10) {
         const nextSession = SESSIONS.find(s => s.num === state.next);
         ctaMain.textContent = `Continue ${nextSession.title}`;
@@ -1237,21 +1420,40 @@
         const locked = !canPlay(s.num);
         const done = state.completed.includes(s.num);
         const current = s.num === state.next && !done;
-        let status = '';
-        if (s.num === 1 && !done) status = '<span class="session-status status-free">Free</span>';
-        else if (locked) status = '<span class="session-status status-locked">Locked</span>';
-        else if (done) status = '<span class="session-status status-done">✓</span>';
-        
+        const isFree = s.num === 1 && !done;
+
+        // SVG icons
+        const lockIcon = '<svg class="session-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+        const checkIcon = '<svg class="session-icon session-icon--done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+
+        let statusHtml = '';
+        if (isFree) statusHtml = '<span class="session-status status-free">Free</span>';
+        else if (locked) statusHtml = lockIcon;
+        else if (done) statusHtml = checkIcon;
+
+        // Badge class
+        let badgeClass = 'session-badge';
+        if (current) badgeClass += ' session-badge--current';
+        else if (done) badgeClass += ' session-badge--done';
+
+        // Card class
+        let cardClass = 'session';
+        if (locked) cardClass += ' locked';
+        if (current) cardClass += ' current';
+        if (done) cardClass += ' session-done';
+        if (isFree) cardClass += ' session-free';
+
         const sessionEl = document.createElement('div');
-        sessionEl.className = `session${locked ? ' locked' : ''}${current ? ' current' : ''}`;
+        sessionEl.className = cardClass;
         sessionEl.dataset.session = s.num;
         sessionEl.innerHTML = `
-          <span class="session-num">${String(s.num).padStart(2, '0')}</span>
+          <span class="${badgeClass}">${done ? '✓' : s.num}</span>
           <div class="session-content">
             <div class="session-name">${s.title}</div>
             <div class="session-focus">${s.subtitle}</div>
+            <div class="session-teaser">${s.teaser}</div>
           </div>
-          ${status}
+          ${statusHtml}
         `;
         sessionsContainer.appendChild(sessionEl);
       });
