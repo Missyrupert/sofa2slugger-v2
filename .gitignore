@@ -1,2 +1,8 @@
 # Local Netlify folder
 .netlify
+
+# Generated audio (regenerate with: python3 mix_sessions.py)
+assets/audio/mixed_sessions/
+
+# Python
+__pycache__/
